@@ -3,8 +3,16 @@
   "tooltip.clean_cut.carion_cleaver": "Peace is a luxury, death is the normality.",
   "tooltip.clean_cut.carion_cleaver.shift": "§7[Shift]",
 
+  "item.clean_cut.living_steel": "Living Steel",
+  "tooltip.clean_cut.living_steel.tooltip": "Its made of flesh, there like a 50% chance you could eat it.",
+
   "enchantment.clean_cut.huntress": "Huntress",
   "enchantment.clean_cut.nursing": "Nursing",
-  "enchantment.clean_cut.unerving": "Unerving",
-  "enchantment.clean_cut.bloodrush": "Bloodrush"
+  "enchantment.clean_cut.unnerving": "Unnerving",
+  "enchantment.clean_cut.bloodrush": "Bloodrush",
+
+  "enchantment.clean_cut.huntress.desc": "Your victim can be seen through walls, and their footsteps are seen clearly. When your victim dies, no one will know they died at you hands.",
+  "enchantment.clean_cut.nursing.desc": "When hitting your victims, it will fill up a blood charge, which will allow you to heal a few hearts. Criting your victim will also halt their movement",
+  "enchantment.clean_cut.unnerving.desc": "When hitting a victim, any hostile creatures, and or players in a close radius, will get a third of the damage.",
+  "enchantment.clean_cut.bloodrush.desc": "When hitting your victims, it will fill up a blood charge, once your cleaver's charge fills, it's charge will act like a countdown. During the count down you will gain swiftness (speed 2), and be able to fly through the air, but the more you do, the more it decreases. (When criting whilst the countdown decreases, it will increase it)"
 }

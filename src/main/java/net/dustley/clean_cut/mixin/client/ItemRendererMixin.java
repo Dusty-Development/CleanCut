@@ -1,4 +1,4 @@
-package net.dustley.clean_cut.mixin;
+package net.dustley.clean_cut.mixin.client;
 
 import net.dustley.clean_cut.client.ClientSetup;
 import net.fabricmc.api.EnvType;

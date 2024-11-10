@@ -3,20 +3,7 @@
   "description": {
     "translate": "enchantment.clean_cut.nursing"
   },
-  "effects": {
-    "minecraft:damage": [
-      {
-        "effect": {
-          "type": "minecraft:add",
-          "value": {
-            "type": "minecraft:linear",
-            "base": 222.0,
-            "per_level_above_first": 0.5
-          }
-        }
-      }
-    ]
-  },
+  "effects": {},
   "max_cost": {
     "base": 21,
     "per_level_above_first": 11

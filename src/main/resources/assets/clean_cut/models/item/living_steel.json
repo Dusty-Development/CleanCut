@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "clean_cut:item/living_steel/living_steel"
+  }
+}

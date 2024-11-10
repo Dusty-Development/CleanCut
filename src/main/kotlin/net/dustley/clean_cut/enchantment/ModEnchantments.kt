@@ -12,7 +12,7 @@ object ModEnchantments {
     val HUNTRESS: RegistryKey<Enchantment> = of("huntress")
     val BLOODRUSH: RegistryKey<Enchantment> = of("bloodrush")
     val NURSING: RegistryKey<Enchantment> = of("nursing")
-    val UNERVING: RegistryKey<Enchantment> = of("unerving")
+    val UNNERVING: RegistryKey<Enchantment> = of("unnerving")
 
     private fun of(name: String): RegistryKey<Enchantment> {
         return RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of(CleanCut.MOD_ID, name))
