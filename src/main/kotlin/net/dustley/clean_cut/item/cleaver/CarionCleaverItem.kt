@@ -1,6 +1,7 @@
 package net.dustley.clean_cut.item.cleaver
 
 import net.dustley.clean_cut.CleanCut
+import net.dustley.clean_cut.entity.thrown_cleaver.ThrownCleaverEntity
 import net.dustley.clean_cut.item.ModItemComponents
 import net.dustley.clean_cut.item.ModItems
 import net.dustley.clean_cut.util.MialeeText
@@ -60,7 +61,8 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
     }
 
     private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
-
+        val entity = ThrownCleaverEntity(user, world, 2.5, 1.0, stack.copyAndEmpty())
+        world.spawnEntity(entity)
     }
 
     private fun onCrit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {

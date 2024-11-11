@@ -5,11 +5,9 @@ import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.entity.EntityRendererFactory
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer
 import net.minecraft.client.render.item.ItemRenderer
-import net.minecraft.client.render.model.json.ModelTransformation
+import net.minecraft.client.render.model.json.ModelTransformationMode
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
-import org.joml.Vector3f
+import org.joml.Quaternionf
 
 
 class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingItemEntityRenderer<ThrownCleaverEntity>(ctx) {
@@ -25,28 +23,53 @@ class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingIt
         entityIn: ThrownCleaverEntity, entityYaw: Float, partialTicks: Float, matrixStackIn: MatrixStack,
         bufferIn: VertexConsumerProvider?, packedLightIn: Int,
     ) {
-        val degrees: Float = entityIn.getRotationAnimation(partialTicks)
-
+        val degrees: Float = entityIn.getRotationAnimation(partialTicks) * 2
         val scale = 0.75f
+
         matrixStackIn.push()
+
+        // Translate the position upwards slightly
         matrixStackIn.translate(0f, 0.15f, 0.0f)
-//        matrixStackIn.multiply(Vec3d.POSITIVE_Y.getDegreesQuaternion( MathHelper.lerp(partialTicks, entityIn.prevYaw, entityIn.getYaw()) - 90.0f ))
-//        matrixStackIn.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-degrees))
+
+        // SIDE SIDE
+
+        // Apply pitch rotation
+        val pitchQuaternion = Quaternionf().rotateZ(Math.toRadians(entityIn.randomAngle).toFloat())
+        matrixStackIn.multiply(pitchQuaternion)
+
+        val yawQuaternion = Quaternionf().rotateY(Math.toRadians(degrees.toDouble()).toFloat())
+        matrixStackIn.multiply(yawQuaternion)
+
+        val rollQuaternion = Quaternionf().rotateX(Math.toRadians(90.0).toFloat())
+        matrixStackIn.multiply(rollQuaternion)
+
+//////////////////////////////
+
+        // UP DOWN
+
+        // Apply yaw rotation
+//        val yaw = MathHelper.lerp(partialTicks, entityIn.prevYaw, entityIn.getYaw()) - 90.0f
+//        val yawQuaternion = Quaternionf().rotateY(Math.toRadians(yaw.toDouble()).toFloat())
+//        matrixStackIn.multiply(yawQuaternion)
+//
+//        // Apply pitch rotation
+//        val pitchQuaternion = Quaternionf().rotateZ(Math.toRadians(-degrees.toDouble()).toFloat())
+//        matrixStackIn.multiply(pitchQuaternion)
+
+        // Scale the item
         matrixStackIn.scale(scale, scale, scale)
 
-        val count: Int = entityIn.getItemStack().getCount()
-
-//        itemRenderer.renderItem(
-//            entityIn.getStack(), ModelTransformation.Mode.FIXED, packedLightIn,
-//            OverlayTexture.DEFAULT_UV, matrixStackIn, bufferIn, entityIn.getId()
-//        )
-//        if (count > 32) {
-//            matrixStackIn.translate(-0.05f, -0.05f, -0.05f)
-//            itemRenderer.renderItem(
-//                entityIn.getStack(), ModelTransformation.Mode.FIXED,
-//                packedLightIn, OverlayTexture.DEFAULT_UV, matrixStackIn, bufferIn, entityIn.getId()
-//            )
-//        }
+        // Render the item
+        itemRenderer?.renderItem(
+            entityIn.getStack(),
+            ModelTransformationMode.FIXED,
+            packedLightIn,
+            OverlayTexture.DEFAULT_UV,
+            matrixStackIn,
+            bufferIn,
+            entityIn.world,
+            entityIn.id
+        )
 
         matrixStackIn.pop()
     }
