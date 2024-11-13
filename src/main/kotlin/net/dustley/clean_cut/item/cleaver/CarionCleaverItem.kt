@@ -15,10 +15,8 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.AxeItem
 import net.minecraft.item.ItemStack
-import net.minecraft.item.ProjectileItem
 import net.minecraft.item.ToolMaterials
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.sound.SoundEvents
@@ -29,11 +27,9 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
-import net.minecraft.util.math.Position
 import net.minecraft.world.World
 
-class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings()), ProjectileItem
+class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
 {
     override fun postDamageEntity(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
         super.postDamageEntity(stack, target, attacker)
@@ -55,33 +51,41 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
 
     override fun onStoppedUsing(stack: ItemStack, world: World, user: LivingEntity, remainingUseTicks: Int) {
         user.playSound(SoundEvents.BLOCK_NETHERRACK_HIT)
-        setBloodCharge(stack, getBloodCharge(stack) - BLOOD_ABILITY_USAGE)
-        onAbility(stack, world, user, getBloodCharge(stack))
+
+        val charge = getBloodCharge(stack)
+
+        if(charge >= BLOOD_ABILITY_USAGE) {
+            onAbility(stack, world, user, charge)
+            setBloodCharge(stack, charge - BLOOD_ABILITY_USAGE)
+        }
+
+        onThrow(stack, world, user, charge)
+
         super.onStoppedUsing(stack, world, user, remainingUseTicks)
     }
 
-    private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
-        val entity = ThrownCleaverEntity(user, world, 2.5, 1.0, stack.copyAndEmpty())
+    private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
+        val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1))
+        stack.decrement(1)
         world.spawnEntity(entity)
+    }
+
+    private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
+
     }
 
     private fun onCrit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
 
     }
 
-    private fun getBloodCharge(stack: ItemStack): Float { return stack.get(ModItemComponents.BLOOD_CHARGE) ?: 0.0f }
-    private fun setBloodCharge(stack: ItemStack, value: Float) { stack.set(ModItemComponents.BLOOD_CHARGE, Math.clamp(value, 0f, 1f)) }
+    fun getBloodCharge(stack: ItemStack): Float { return stack.get(ModItemComponents.BLOOD_CHARGE) ?: 0.0f }
+    fun setBloodCharge(stack: ItemStack, value: Float) { stack.set(ModItemComponents.BLOOD_CHARGE, Math.clamp(value, 0f, 1f)) }
 
     // SETTINGS //
     override fun isUsedOnRelease(stack: ItemStack): Boolean = false
     override fun canMine(state: BlockState?, world: World?, pos: BlockPos?, miner: PlayerEntity): Boolean = !miner.isCreative
     override fun getMaxUseTime(stack: ItemStack?, user: LivingEntity?): Int = 72000
     override fun canRepair(stack: ItemStack, ingredient: ItemStack): Boolean = ingredient.item == ModItems.LIVING_STEEL
-    override fun getDefaultStack(): ItemStack {
-        val stack = ItemStack(this)
-        setBloodCharge(stack, 0.0f)
-        return stack
-    }
 
     // VISUALS //
     override fun getUseAction(stack: ItemStack?): UseAction = UseAction.SPEAR
@@ -109,6 +113,7 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
     companion object {
         val BLOOD_UI_COLOR = "#de0d2b"
 
+        val BLOOD_GAIN_PROJECTILE = 0.1f // How much of the blood is gained when killing an entity
         val BLOOD_GAIN_KILL = 0.42f // How much of the blood is gained when killing an entity
         val BLOOD_GAIN_CRIT = 0.09f // How much of the blood is gained when crit an entity
         val BLOOD_GAIN_HIT = 0.01f // How much of the blood is gained when hitting an entity
@@ -128,15 +133,6 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
         private fun createAttributeModifiers() = AttributeModifiersComponent.builder()
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, EntityAttributeModifier(BASE_ATTACK_DAMAGE_MODIFIER_ID, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND )
             .add(EntityAttributes.GENERIC_ATTACK_SPEED, EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, BASE_ATTACK_SPEED.toDouble(), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND).build()
-    }
-
-    override fun createEntity(
-        world: World?,
-        pos: Position?,
-        stack: ItemStack?,
-        direction: Direction?,
-    ): ProjectileEntity {
-        TODO("Not yet implemented")
     }
 
 }

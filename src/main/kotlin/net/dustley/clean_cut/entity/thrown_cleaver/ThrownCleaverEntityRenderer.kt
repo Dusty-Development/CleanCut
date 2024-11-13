@@ -32,22 +32,21 @@ class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingIt
         matrixStackIn.translate(0f, 0.15f, 0.0f)
 
         // SIDE SIDE
-
-        // Apply pitch rotation
-        val pitchQuaternion = Quaternionf().rotateZ(Math.toRadians(entityIn.randomAngle).toFloat())
-        matrixStackIn.multiply(pitchQuaternion)
-
+//
         val yawQuaternion = Quaternionf().rotateY(Math.toRadians(degrees.toDouble()).toFloat())
         matrixStackIn.multiply(yawQuaternion)
 
         val rollQuaternion = Quaternionf().rotateX(Math.toRadians(90.0).toFloat())
         matrixStackIn.multiply(rollQuaternion)
 
+        val pitchQuaternion = Quaternionf().rotateX(Math.toRadians(entityIn.randomAngle).toFloat())
+        matrixStackIn.multiply(pitchQuaternion)
+
 //////////////////////////////
 
         // UP DOWN
-
-        // Apply yaw rotation
+//
+////         Apply yaw rotation
 //        val yaw = MathHelper.lerp(partialTicks, entityIn.prevYaw, entityIn.getYaw()) - 90.0f
 //        val yawQuaternion = Quaternionf().rotateY(Math.toRadians(yaw.toDouble()).toFloat())
 //        matrixStackIn.multiply(yawQuaternion)
