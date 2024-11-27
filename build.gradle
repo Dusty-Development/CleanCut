@@ -12,11 +12,14 @@ base {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	maven {
+		url = "https://api.modrinth.com/maven"
+	}
+
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://maven.ladysnake.org/releases'
+	}
 }
 
 fabricApi {
@@ -33,7 +36,19 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
+	modImplementation "maven.modrinth:aaa-particles:${project.aaa_particle_version}"
+	modImplementation "maven.modrinth:architectury-api:${project.architecture_version}+fabric"
 
+	// Cardinal Components
+//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.project.cca_version}"
+//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.project.cca_version}"
+//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-world:${project.project.cca_version}"
+//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-block:${project.project.cca_version}"
+//
+//	include "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+//	include "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
+//	include "org.ladysnake.cardinal-components-api:cardinal-components-world:${project.cca_version}"
+//	include "org.ladysnake.cardinal-components-api:cardinal-components-block:${project.cca_version}"
 }
 
 processResources {

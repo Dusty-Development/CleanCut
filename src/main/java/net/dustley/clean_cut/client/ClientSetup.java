@@ -36,13 +36,14 @@ public class ClientSetup {
     
     public static void registerExtraBakedModels(Consumer<ModelIdentifier> registration) {
         System.out.println("registered models");
-        registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("carion_cleaver_inventory")));
-        System.out.println("Registered model: " + ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("carion_cleaver_inventory")));
-        //registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("carion_cleaver_overlay")));
+        registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("carrion_cleaver_inventory")));
+        registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("rose_blood_cleaver_inventory")));
+        //registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("carrion_cleaver_overlay")));
     }
 
     public static void clientSetup() {
-        registerSimpleSpecialModel("carion_cleaver");
+        registerSimpleSpecialModel("carrion_cleaver");
+        registerSimpleSpecialModel("rose_blood_cleaver");
         System.out.println("client was called");
     }
 

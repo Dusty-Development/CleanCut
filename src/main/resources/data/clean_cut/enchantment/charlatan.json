@@ -1,7 +1,7 @@
 {
   "anvil_cost": 1,
   "description": {
-    "translate": "enchantment.clean_cut.unnerving"
+    "translate": "enchantment.clean_cut.charlatan"
   },
   "effects": {},
   "max_cost": {
@@ -16,6 +16,6 @@
   "slots": [
     "hand"
   ],
-  "supported_items": "clean_cut:carion_cleaver",
+  "supported_items": "#clean_cut:cleavers",
   "weight": 10
 }

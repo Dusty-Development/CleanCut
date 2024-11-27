@@ -1,6 +1,6 @@
 package net.dustley.clean_cut.item.living_steel
 
-import net.dustley.clean_cut.item.ModItemComponents
+import net.dustley.clean_cut.component.ModItemComponents
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType

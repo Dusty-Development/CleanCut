@@ -1,21 +1,28 @@
 package net.dustley.clean_cut
 
+import dev.architectury.registry.ReloadListenerRegistry
+import mod.chloeprime.aaaparticles.client.loader.EffekAssetLoader
 import net.dustley.clean_cut.client.ClientSetup
 import net.dustley.clean_cut.client.CustomModelLoadingPlugin
 import net.dustley.clean_cut.entity.ModEntities
+import net.dustley.clean_cut.particle.ModParticles
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.impl.client.model.loading.ModelLoadingPluginManager
+import net.minecraft.resource.ResourceType
+import net.minecraft.util.Identifier
 
 object CleanCutClient : ClientModInitializer {
 
     override fun onInitializeClient() {
         ModEntities.registerModEntityRenderers()
-//        ModParticles.registerClientParticles()
+        ModParticles.registerParticles()
 //        ModNetworking.registerS2CPackets()
 
         ClientSetup.clientSetup()
         ModelLoadingPluginManager.registerPlugin(CustomModelLoadingPlugin())
-        ClientSetup.registerExtraBakedModels(CustomModelLoadingPlugin.MODELS::add);
+        ClientSetup.registerExtraBakedModels(CustomModelLoadingPlugin.MODELS::add)
+
+        ReloadListenerRegistry.register(ResourceType.CLIENT_RESOURCES, EffekAssetLoader(), Identifier.of(CleanCut.MOD_ID, "effeks"))
     }
 
 }

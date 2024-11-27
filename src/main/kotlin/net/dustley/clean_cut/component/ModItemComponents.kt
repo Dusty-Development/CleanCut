@@ -1,8 +1,7 @@
-package net.dustley.clean_cut.item
+package net.dustley.clean_cut.component
 
 import com.mojang.serialization.Codec
 import net.dustley.clean_cut.CleanCut
-import net.minecraft.block.entity.EnchantingTableBlockEntity
 import net.minecraft.component.ComponentType
 import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.effect.StatusEffectInstance

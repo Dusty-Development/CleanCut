@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:item/generated",
 	"textures": {
-		"layer0": "clean_cut:item/carion_cleaver/carion_cleaver_item"
+		"layer0": "clean_cut:item/carrion_cleaver/carrion_cleaver_item"
 	},
 	"display": {
 		"ground": {

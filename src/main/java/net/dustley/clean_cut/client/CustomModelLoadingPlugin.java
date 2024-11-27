@@ -13,7 +13,8 @@ public class CustomModelLoadingPlugin implements ModelLoadingPlugin {
     // Static block to add models on class load
     static {
         // Add your custom model identifiers here
-        MODELS.add(new ModelIdentifier(CleanCut.INSTANCE.id("carion_cleaver_inventory"), "inventory"));
+        MODELS.add(new ModelIdentifier(CleanCut.INSTANCE.id("carrion_cleaver_inventory"), "inventory"));
+        MODELS.add(new ModelIdentifier(CleanCut.INSTANCE.id("rose_blood_cleaver_inventory"), "inventory"));
     }
 
     @Override

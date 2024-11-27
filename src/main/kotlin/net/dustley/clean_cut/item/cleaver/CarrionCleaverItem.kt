@@ -1,8 +1,9 @@
 package net.dustley.clean_cut.item.cleaver
 
 import net.dustley.clean_cut.CleanCut
+import net.dustley.clean_cut.enchantment.ModEnchantments
 import net.dustley.clean_cut.entity.thrown_cleaver.ThrownCleaverEntity
-import net.dustley.clean_cut.item.ModItemComponents
+import net.dustley.clean_cut.component.ModItemComponents
 import net.dustley.clean_cut.item.ModItems
 import net.dustley.clean_cut.util.MialeeText
 import net.minecraft.block.BlockState
@@ -11,6 +12,7 @@ import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.AttributeModifierSlot
 import net.minecraft.component.type.AttributeModifiersComponent
 import net.minecraft.component.type.ToolComponent
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
@@ -29,8 +31,11 @@ import net.minecraft.util.UseAction
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
+open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
 {
+
+    open fun isRose() = false
+
     override fun postDamageEntity(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
         super.postDamageEntity(stack, target, attacker)
 
@@ -65,9 +70,29 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
     }
 
     private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
-        val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1))
+
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.NURSING) {
+            // Add cooldown
+        }
+
+        val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose())
+        entity.enchantmentType = getEnchantmentType(stack)
         stack.decrement(1)
         world.spawnEntity(entity)
+
+    }
+
+    private fun getEnchantmentType(stack: ItemStack):CleaverEnchantmentType {
+        EnchantmentHelper.getEnchantments(stack).enchantments.forEach {
+            val key = it.key.get()
+            when (key) {
+                ModEnchantments.BLOODRUSH -> return CleaverEnchantmentType.BLOOD_RUSH
+                ModEnchantments.CHARLATAN -> return CleaverEnchantmentType.CHARLATAN
+                ModEnchantments.HUNTRESS -> return CleaverEnchantmentType.HUNTRESS
+                ModEnchantments.NURSING -> return CleaverEnchantmentType.NURSING
+            }
+        }
+        return CleaverEnchantmentType.NONE
     }
 
     private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
@@ -91,7 +116,7 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
     override fun getUseAction(stack: ItemStack?): UseAction = UseAction.SPEAR
     override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < BLOOD_ABILITY_USAGE }
     override fun getItemBarStep(stack: ItemStack): Int = Math.round(getBloodCharge(stack) * 13.0).toInt()
-    override fun getItemBarColor(stack: ItemStack): Int = BLOOD_UI_COLOR.substring(1).toInt(16) // Convert hex to int
+    override fun getItemBarColor(stack: ItemStack): Int = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
 
     override fun appendTooltip(
         stack: ItemStack,
@@ -99,19 +124,21 @@ class CarionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
         tooltip: MutableList<Text>,
         type: TooltipType,
     ) {
-        tooltip.add(Text.translatable("tooltip.${CleanCut.MOD_ID}.carion_cleaver").setStyle(EMPTY.withColor(Formatting.GRAY)))
+        tooltip.add(Text.translatable("tooltip.${CleanCut.MOD_ID}.${getID()}").setStyle(EMPTY.withColor(Formatting.GRAY)))
 
-        val color = BLOOD_UI_COLOR.substring(1).toInt(16) // Convert hex to int
+        val color = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
         val percentage = if(stack.get(ModItemComponents.BLOOD_CHARGE) != null) (stack.get(ModItemComponents.BLOOD_CHARGE)!! * 100f).toInt() else 0
         if(Screen.hasShiftDown()) tooltip.add(Text.literal("Blood charge percentage: ").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.literal("$percentage%").setStyle(EMPTY), color)))
 
         super.appendTooltip(stack, context, tooltip, type)
 
-        if(!Screen.hasShiftDown()) tooltip.add(Text.translatable("tooltip.${CleanCut.MOD_ID}.carion_cleaver.shift"))
+        if(!Screen.hasShiftDown()) tooltip.add(Text.translatable("tooltip.${CleanCut.MOD_ID}.${getID()}.shift"))
     }
 
+    open fun getID() = "carrion_cleaver"
+    open fun getBloodUIColor() = "#de0d2b"
+
     companion object {
-        val BLOOD_UI_COLOR = "#de0d2b"
 
         val BLOOD_GAIN_PROJECTILE = 0.1f // How much of the blood is gained when killing an entity
         val BLOOD_GAIN_KILL = 0.42f // How much of the blood is gained when killing an entity

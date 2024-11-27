@@ -26,6 +26,7 @@ object ModEntities {
                 .build("thrown_cleaver")
         )
 
+
     // Server
     fun registerModEntities() {
         CleanCut.LOGGER.info("Registering Entities for " + CleanCut.MOD_ID)

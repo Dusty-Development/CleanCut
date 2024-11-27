@@ -1,7 +1,8 @@
 package net.dustley.clean_cut.item
 
 import net.dustley.clean_cut.CleanCut
-import net.dustley.clean_cut.item.cleaver.CarionCleaverItem
+import net.dustley.clean_cut.item.cleaver.CarrionCleaverItem
+import net.dustley.clean_cut.item.cleaver.RoseBloodCleaverItem
 import net.dustley.clean_cut.item.living_steel.LivingSteelItem
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
@@ -13,7 +14,10 @@ import net.minecraft.util.Identifier
 
 object ModItems {
 
-    val CLEAVER_OF_THE_CARION: Item = registerItem( "carion_cleaver", CarionCleaverItem())
+    val CLEAVER_OF_THE_CARRION: Item = registerItem( "carrion_cleaver", CarrionCleaverItem())
+    val ROSE_BLOOD_CLEAVER: Item = registerItem( "rose_blood_cleaver", RoseBloodCleaverItem())
+
+
     val LIVING_STEEL: Item = registerItem( "living_steel", LivingSteelItem())
 
     private fun registerItem(name: String, item: Item): Item {
@@ -25,7 +29,8 @@ object ModItems {
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
             .register(ItemGroupEvents.ModifyEntries { entries: FabricItemGroupEntries ->
-                entries.add(CLEAVER_OF_THE_CARION)
+                entries.add(CLEAVER_OF_THE_CARRION)
+                entries.add(ROSE_BLOOD_CLEAVER)
             })
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS)

@@ -2,7 +2,8 @@ package net.dustley.clean_cut.entity.thrown_cleaver
 
 import net.dustley.clean_cut.entity.ModEntities
 import net.dustley.clean_cut.item.ModItems
-import net.dustley.clean_cut.item.cleaver.CarionCleaverItem
+import net.dustley.clean_cut.item.cleaver.CarrionCleaverItem
+import net.dustley.clean_cut.item.cleaver.CleaverEnchantmentType
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.enchantment.EnchantmentHelper
@@ -11,6 +12,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.data.TrackedData
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.PersistentProjectileEntity
 import net.minecraft.item.ItemStack
@@ -29,7 +31,7 @@ import net.minecraft.world.World
 
 //https://github.com/dainxt/WeaponThrow/blob/fabric-1.18.2/src/main/java/com/dainxt/weaponthrow/projectile/WeaponThrowEntity.java
 
-class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities.THROWN_CLEAVER, world), FlyingItemEntity {
+class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : PersistentProjectileEntity(ModEntities.THROWN_CLEAVER, world), FlyingItemEntity {
 
     // Stats
     private var dealtDamage = false
@@ -38,6 +40,7 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
     val randomAngle = (Math.random() -0.5) * 25
     private var clientSideRotation = 0f
     private var counterClockwiseBounce = false
+    var enchantmentType = CleaverEnchantmentType.NONE
     var hitEntity = false
     var isReturning = false
 
@@ -45,7 +48,7 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
     var returnTimer: Int = RETURN_MAX_TIME
     var holdTimer:Int = 0
 
-    constructor(livingEntity: LivingEntity, world: World, power: Double, atkDamage:Double, weaponItem: ItemStack) : this(world) {
+    constructor(livingEntity: LivingEntity, world: World, power: Double, atkDamage:Double, weaponItem:ItemStack, isRose:Boolean) : this(world, isRose) {
         this.owner = livingEntity
         damage = atkDamage + 1.0;
         stack = weaponItem
@@ -56,6 +59,8 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
 
     // EVENTS //
     override fun tick() {
+//        if(world.isClient) AAALevel.addParticle(world, true, TRAIL_PARTICLE.clone().position(pos.add(0.0,(height/2f).toDouble(),0.0)).scale(0.05f))
+
         if (this.inGroundTime > HOLD_MAX_TIME && !this.dealtDamage) {
             this.dealtDamage = true
             isReturning = true
@@ -85,12 +90,10 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
 
         super.tick()
     }
-
     fun setToReturn() {
         isReturning = true
         holdTimer = HOLD_MAX_TIME
     }
-
     fun attackEntitiesNearby() {
         val posA = pos.subtract(Vec3d(1.0,1.0,1.0))
         val posB = pos.add(Vec3d(1.0,1.0,1.0))
@@ -101,9 +104,9 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
             val entity = it
             val owner = this.owner
 
-            if(entity is LivingEntity) {
+            if(entity is LivingEntity && entity != owner) {
 
-                val damageSource = this.damageSources.generic()
+                val damageSource = this.damageSources.thrown(this, owner)
                 if (world is ServerWorld) damage = EnchantmentHelper.getDamage(
                     world as ServerWorld,
                     this.weaponStack,
@@ -120,10 +123,10 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
 
                         this.knockback(entity, damageSource)
 
-                        val item = (ModItems.CLEAVER_OF_THE_CARION as CarionCleaverItem)
+                        val item = (ModItems.CLEAVER_OF_THE_CARRION as CarrionCleaverItem)
                         item.setBloodCharge(
                             weaponStack,
-                            item.getBloodCharge(weaponStack) + CarionCleaverItem.BLOOD_GAIN_PROJECTILE
+                            item.getBloodCharge(weaponStack) + CarrionCleaverItem.BLOOD_GAIN_PROJECTILE
                         )
 
                         if (world is ServerWorld) EnchantmentHelper.onTargetDamaged(
@@ -140,6 +143,20 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
                                 GameStateChangeS2CPacket.DEMO_OPEN_SCREEN.toFloat()
                             )
                         )
+
+                        if(enchantmentType == CleaverEnchantmentType.NURSING) {
+                            (owner as LivingEntity).heal(2f)
+
+                            val ownerEffects: MutableCollection<StatusEffectInstance> = mutableListOf()
+                            owner.statusEffects.forEach { ownerEffects.add(it) }
+
+                            owner.clearStatusEffects()
+                            entity.statusEffects.forEach { effect -> owner.addStatusEffect(effect) }
+
+                            entity.clearStatusEffects()
+                            ownerEffects.forEach { entity.addStatusEffect(it) }
+
+                        }
                     }
 
                     playHitEntityEffects()
@@ -156,9 +173,10 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
     override fun age() { this.age++ }
     override fun tryPickup(player: PlayerEntity): Boolean = super.tryPickup(player) || this.isNoClip && this.isOwner(player) && player.inventory.insertStack(asItemStack())
     override fun asItemStack(): ItemStack {
-        println(itemStack.item.components)
         return itemStack.copyComponentsToNewStack(itemStack.item, 1)
     }
+    fun asPublicItemStack():ItemStack = asItemStack()
+
     override fun onPlayerCollision(player: PlayerEntity?) {
         if (this.isOwner(player) || this.owner == null) {
             super.onPlayerCollision(player)
@@ -175,32 +193,29 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
     // EFFECTS //
     fun playHitEntityEffects() {
         playSound(ENTITY_HIT_SOUND, 1.0f, 1.0f) // Play blood particles
+//        if(world.isClient) AAALevel.addParticle(world, true, HIT_ENTITY_PARTICLE.clone().position(pos.add(0.0,(height/2f).toDouble(),0.0)).scale(1f))
         world.addParticle(ParticleTypes.MYCELIUM, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0)
     }
-
     fun playHitBlockEffects() {
         playSound(BLOCK_HIT_SOUND, 1.0f, 1.0f) // Play block particles
         counterClockwiseBounce = true
-        world.addParticle(ParticleTypes.ELECTRIC_SPARK, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0)
-        world.addParticle(ParticleTypes.FLASH, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0)
+//        if(world.isClient) AAALevel.addParticle(world, true, HIT_BLOCK_PARTICLE.clone().position(pos.add(0.0,(height/2f).toDouble(),0.0)).scale(50f))
     }
 
     // INVENTORY //
     override fun getWeaponStack(): ItemStack = this.itemStack
     override fun getStack(): ItemStack = this.itemStack
-    override fun getDefaultItemStack(): ItemStack = ItemStack(ModItems.CLEAVER_OF_THE_CARION)
+    override fun getDefaultItemStack(): ItemStack = if(isRose) ItemStack(ModItems.ROSE_BLOOD_CLEAVER) else ItemStack(ModItems.CLEAVER_OF_THE_CARRION)
 
     // DATA //
     override fun initDataTracker(builder: DataTracker.Builder) {
         super.initDataTracker(builder)
         builder.add(ENCHANTED_DATA, false)
     }
-
     override fun readCustomDataFromNbt(nbt: NbtCompound) {
         super.readCustomDataFromNbt(nbt)
         this.dealtDamage = nbt.getBoolean(DEALT_DAMAGE_NBT)
     }
-
     override fun writeCustomDataToNbt(nbt: NbtCompound) {
         super.writeCustomDataToNbt(nbt)
         nbt.putBoolean(DEALT_DAMAGE_NBT, this.dealtDamage)
@@ -220,7 +235,7 @@ class ThrownCleaverEntity(world: World) : PersistentProjectileEntity(ModEntities
         private val ENCHANTED_DATA: TrackedData<Boolean> = DataTracker.registerData(ThrownCleaverEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
 
         val ENTITY_HIT_SOUND = SoundEvents.ITEM_NETHER_WART_PLANT
-        val BLOCK_HIT_SOUND = SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT
+        val BLOCK_HIT_SOUND = SoundEvents.BLOCK_ANVIL_HIT
 
         val HOLD_MAX_TIME = 8
         val RETURN_MAX_TIME = 30

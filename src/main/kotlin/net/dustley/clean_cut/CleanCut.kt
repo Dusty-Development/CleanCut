@@ -1,8 +1,9 @@
 package net.dustley.clean_cut
 
+import net.dustley.clean_cut.component.ModComponents
+import net.dustley.clean_cut.component.ModItemComponents
 import net.dustley.clean_cut.enchantment.ModEnchantments
 import net.dustley.clean_cut.entity.ModEntities
-import net.dustley.clean_cut.item.ModItemComponents
 import net.dustley.clean_cut.item.ModItems
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
@@ -21,6 +22,7 @@ object CleanCut : ModInitializer {
 		ModEntities.registerModEntities()
 		ModItems.registerModItems()
 		ModItemComponents.registerDataComponentTypes()
+		ModComponents.registerModComponents()
 
 		LOGGER.info("Initialization finished for: $MOD_ID")
 	}

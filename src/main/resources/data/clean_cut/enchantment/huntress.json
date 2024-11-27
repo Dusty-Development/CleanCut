@@ -16,6 +16,6 @@
   "slots": [
     "hand"
   ],
-  "supported_items": "clean_cut:carion_cleaver",
+  "supported_items": "#clean_cut:cleavers",
   "weight": 10
 }

@@ -15,9 +15,7 @@ class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingIt
 
     private var itemRenderer: ItemRenderer? = null
 
-    init {
-        this.itemRenderer = ctx.itemRenderer
-    }
+    init { this.itemRenderer = ctx.itemRenderer }
 
     override fun render(
         entityIn: ThrownCleaverEntity, entityYaw: Float, partialTicks: Float, matrixStackIn: MatrixStack,
@@ -31,8 +29,6 @@ class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingIt
         // Translate the position upwards slightly
         matrixStackIn.translate(0f, 0.15f, 0.0f)
 
-        // SIDE SIDE
-//
         val yawQuaternion = Quaternionf().rotateY(Math.toRadians(degrees.toDouble()).toFloat())
         matrixStackIn.multiply(yawQuaternion)
 
@@ -42,25 +38,12 @@ class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingIt
         val pitchQuaternion = Quaternionf().rotateX(Math.toRadians(entityIn.randomAngle).toFloat())
         matrixStackIn.multiply(pitchQuaternion)
 
-//////////////////////////////
-
-        // UP DOWN
-//
-////         Apply yaw rotation
-//        val yaw = MathHelper.lerp(partialTicks, entityIn.prevYaw, entityIn.getYaw()) - 90.0f
-//        val yawQuaternion = Quaternionf().rotateY(Math.toRadians(yaw.toDouble()).toFloat())
-//        matrixStackIn.multiply(yawQuaternion)
-//
-//        // Apply pitch rotation
-//        val pitchQuaternion = Quaternionf().rotateZ(Math.toRadians(-degrees.toDouble()).toFloat())
-//        matrixStackIn.multiply(pitchQuaternion)
-
-        // Scale the item
         matrixStackIn.scale(scale, scale, scale)
+
 
         // Render the item
         itemRenderer?.renderItem(
-            entityIn.getStack(),
+            entityIn.asPublicItemStack(),
             ModelTransformationMode.FIXED,
             packedLightIn,
             OverlayTexture.DEFAULT_UV,

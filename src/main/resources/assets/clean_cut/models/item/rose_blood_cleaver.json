@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:item/handheld",
 	"textures": {
-		"layer0": "clean_cut:item/carion_cleaver/carion_cleaver"
+		"layer0": "clean_cut:item/rose_blood_cleaver/rose_blood_cleaver"
 	},
 	"display": {
 		"thirdperson_righthand": {

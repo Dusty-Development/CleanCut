@@ -1,18 +1,22 @@
 {
-  "item.clean_cut.carion_cleaver": "Cleaver of the Carion",
-  "tooltip.clean_cut.carion_cleaver": "Peace is a luxury, death is the normality.",
-  "tooltip.clean_cut.carion_cleaver.shift": "§7[Shift]",
+  "item.clean_cut.carrion_cleaver": "Cleaver of the Carrion",
+  "tooltip.clean_cut.carrion_cleaver": "Peace is a luxury, death is the normality.",
+  "tooltip.clean_cut.carrion_cleaver.shift": "§7[Shift]",
+
+  "item.clean_cut.rose_blood_cleaver": "Cleaver of Rose Blood",
+  "tooltip.clean_cut.rose_blood_cleaver": "Do not go gentle into that good night, Old age should burn and rave at close of day;",
+  "tooltip.clean_cut.rose_blood_cleaver.shift": "§7[Shift]",
 
   "item.clean_cut.living_steel": "Living Steel",
   "tooltip.clean_cut.living_steel.tooltip": "Its made of flesh, there like a 50% chance you could eat it.",
 
   "enchantment.clean_cut.huntress": "Huntress",
   "enchantment.clean_cut.nursing": "Nursing",
-  "enchantment.clean_cut.unnerving": "Unnerving",
+  "enchantment.clean_cut.charlatan": "Charlatan",
   "enchantment.clean_cut.bloodrush": "Bloodrush",
 
   "enchantment.clean_cut.huntress.desc": "Your victim can be seen through walls, and their footsteps are seen clearly. When your victim dies, no one will know they died at you hands.",
-  "enchantment.clean_cut.nursing.desc": "When hitting your victims, it will fill up a blood charge, which will allow you to heal a few hearts. Criting your victim will also halt their movement",
-  "enchantment.clean_cut.unnerving.desc": "When hitting a victim, any hostile creatures, and or players in a close radius, will get a third of the damage.",
-  "enchantment.clean_cut.bloodrush.desc": "When hitting your victims, it will fill up a blood charge, once your cleaver's charge fills, it's charge will act like a countdown. During the count down you will gain swiftness (speed 2), and be able to fly through the air, but the more you do, the more it decreases. (When criting whilst the countdown decreases, it will increase it)"
+  "enchantment.clean_cut.nursing.desc": "Now when throwing the cleaver at your victim, it will give you a two hearts, and steal every effect they had, good or bad. But will now give your cleaver a cooldown for each throw.",
+  "enchantment.clean_cut.charlatan.desc": "You can now throw your cleaver in two ways. When normaly throwing, the cleaver will now auto aim, and hit three victims that are close by, before comeing back to you. When sneaking and throwing, it will circle around you for 1 minute, then it will return to you.",
+  "enchantment.clean_cut.bloodrush.desc": "Filling your bloodcharge will now Automaticly put you into a frenzy, allowing you to use your cleaver like a riptide trident. But this will only last as long as you keep the bloodcharge up. And now when attacking your victim, it will stop there momentum."
 }
