@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:rose_bush"
+    },
+    "C": {
+      "item": "clean_cut:carrion_cleaver"
+    }
+  },
+  "result": {
+    "id": "clean_cut:rose_blood_cleaver",
+    "count": 1
+  }
+}

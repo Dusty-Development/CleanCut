@@ -17,6 +17,7 @@ object ModItemComponents {
     val LIVING_STEEL_FOOD: FoodComponent = FoodComponent.Builder().nutrition(10).saturationModifier(0.1f).statusEffect(StatusEffectInstance(StatusEffects.WITHER, 200, 5), 0.5f).build()
 
     val BLOOD_CHARGE: ComponentType<Float?> = register( "blood_charge" ) { builder: ComponentType.Builder<Float?> -> builder.codec( Codec.FLOAT ) }
+    val IS_ACTIVE: ComponentType<Boolean?> = register( "is_active" ) { builder: ComponentType.Builder<Boolean?> -> builder.codec( Codec.BOOL ) }
 
     private fun <T> register(name: String, builderOperator: UnaryOperator<ComponentType.Builder<T>>): ComponentType<T> {
         return Registry.register(

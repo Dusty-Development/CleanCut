@@ -17,6 +17,6 @@
 
   "enchantment.clean_cut.huntress.desc": "Your victim can be seen through walls, and their footsteps are seen clearly. When your victim dies, no one will know they died at you hands.",
   "enchantment.clean_cut.nursing.desc": "Now when throwing the cleaver at your victim, it will give you a two hearts, and steal every effect they had, good or bad. But will now give your cleaver a cooldown for each throw.",
-  "enchantment.clean_cut.charlatan.desc": "You can now throw your cleaver in two ways. When normaly throwing, the cleaver will now auto aim, and hit three victims that are close by, before comeing back to you. When sneaking and throwing, it will circle around you for 1 minute, then it will return to you.",
-  "enchantment.clean_cut.bloodrush.desc": "Filling your bloodcharge will now Automaticly put you into a frenzy, allowing you to use your cleaver like a riptide trident. But this will only last as long as you keep the bloodcharge up. And now when attacking your victim, it will stop there momentum."
+  "enchantment.clean_cut.charlatan.desc": "You can now throw your cleaver in two ways. When normally throwing, the cleaver will now auto aim, and hit three victims that are close by, before coming back to you. When sneaking and throwing, it will circle around you for 1 minute, then it will return to you.",
+  "enchantment.clean_cut.bloodrush.desc": "Filling your blood charge will now Automatically put you into a frenzy, allowing you to use your cleaver like a riptide trident. But this will only last as long as you keep the blood charge up. And now when attacking your victim, it will stop there momentum."
 }

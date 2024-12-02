@@ -1,9 +1,9 @@
 package net.dustley.clean_cut.item.cleaver
 
 import net.dustley.clean_cut.CleanCut
+import net.dustley.clean_cut.component.ModItemComponents
 import net.dustley.clean_cut.enchantment.ModEnchantments
 import net.dustley.clean_cut.entity.thrown_cleaver.ThrownCleaverEntity
-import net.dustley.clean_cut.component.ModItemComponents
 import net.dustley.clean_cut.item.ModItems
 import net.dustley.clean_cut.util.MialeeText
 import net.minecraft.block.BlockState
@@ -13,9 +13,12 @@ import net.minecraft.component.type.AttributeModifierSlot
 import net.minecraft.component.type.AttributeModifiersComponent
 import net.minecraft.component.type.ToolComponent
 import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.AxeItem
 import net.minecraft.item.ItemStack
@@ -46,6 +49,16 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         setBloodCharge(stack, getBloodCharge(stack) + chargeAmount)
 
         if(attacker.fallDistance >= 0.01f) onCrit(stack, target, attacker)
+
+        if(getIsActive(stack)) {
+            target.setVelocity(0.0, 0.0, 0.0)
+            target.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 5, 2, true, false))
+        }
+
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
+            if(getBloodCharge(stack) > 0.99f) setIsActive(stack,true)
+        }
+
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
@@ -69,10 +82,31 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         super.onStoppedUsing(stack, world, user, remainingUseTicks)
     }
 
+    override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
+        super.inventoryTick(stack, world, entity, slot, selected)
+
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH && getIsActive(stack)) {
+            if(selected) setBloodCharge(stack,getBloodCharge(stack) - (BLOOD_DRAIN_USAGE * 0.5f))
+            else setBloodCharge(stack,getBloodCharge(stack) - BLOOD_DRAIN_USAGE)
+
+            if(entity is LivingEntity) {
+                entity.addStatusEffect(StatusEffectInstance(StatusEffects.SPEED, 5, 2, true, false))
+                entity.addStatusEffect(StatusEffectInstance(StatusEffects.STRENGTH, 5, 1, true, false))
+                entity.addStatusEffect(StatusEffectInstance(StatusEffects.RESISTANCE, 5, 1, true, false))
+                entity.addStatusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 5, 0, true, false))
+            }
+
+            if(getBloodCharge(stack) <= 0.0001f) {
+                setIsActive(stack, false)
+                setBloodCharge(stack, 0f)
+            }
+        }
+    }
+
     private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
 
         if(getEnchantmentType(stack) == CleaverEnchantmentType.NURSING) {
-            // Add cooldown
+
         }
 
         val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose())
@@ -106,6 +140,9 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
     fun getBloodCharge(stack: ItemStack): Float { return stack.get(ModItemComponents.BLOOD_CHARGE) ?: 0.0f }
     fun setBloodCharge(stack: ItemStack, value: Float) { stack.set(ModItemComponents.BLOOD_CHARGE, Math.clamp(value, 0f, 1f)) }
 
+    fun getIsActive(stack: ItemStack): Boolean { return stack.get(ModItemComponents.IS_ACTIVE) ?: false }
+    fun setIsActive(stack: ItemStack, value: Boolean) { stack.set(ModItemComponents.IS_ACTIVE, value) }
+
     // SETTINGS //
     override fun isUsedOnRelease(stack: ItemStack): Boolean = false
     override fun canMine(state: BlockState?, world: World?, pos: BlockPos?, miner: PlayerEntity): Boolean = !miner.isCreative
@@ -114,7 +151,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
     // VISUALS //
     override fun getUseAction(stack: ItemStack?): UseAction = UseAction.SPEAR
-    override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < BLOOD_ABILITY_USAGE }
+    override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < BLOOD_ABILITY_USAGE || getIsActive(stack) }
     override fun getItemBarStep(stack: ItemStack): Int = Math.round(getBloodCharge(stack) * 13.0).toInt()
     override fun getItemBarColor(stack: ItemStack): Int = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
 
@@ -146,6 +183,8 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         val BLOOD_GAIN_HIT = 0.01f // How much of the blood is gained when hitting an entity
         val BLOOD_ABILITY_USAGE = 1.0f // How much of the blood is used up when using an ability
 
+        val BLOOD_DRAIN_USAGE = 0.005f // How much of the blood is used up when activated by bloodrush
+
         val BASE_ATTACK_DAMMAGE = 3.5f
         val BASE_ATTACK_SPEED = -2.4f
 
@@ -155,6 +194,8 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         fun createItemSettings(): Settings = Settings()
             .attributeModifiers(ATTRIBUTE_MODIFIERS)
             .component(DataComponentTypes.TOOL, ToolComponent(listOf(), DEFAULT_MINING_SPEED, MINING_DAMAGE_PER_BLOCK))
+            .component(ModItemComponents.BLOOD_CHARGE, 0f)
+            .component(ModItemComponents.IS_ACTIVE, false)
 
         private val ATTRIBUTE_MODIFIERS: AttributeModifiersComponent = createAttributeModifiers()
         private fun createAttributeModifiers() = AttributeModifiersComponent.builder()

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "iHi",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "H": {
+      "item": "#clean_cut:heads"
+    }
+  },
+  "result": {
+    "id": "clean_cut:living_steel",
+    "count": 1
+  }
+}

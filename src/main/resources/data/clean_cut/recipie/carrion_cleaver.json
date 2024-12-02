@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "/"
+  ],
+  "key": {
+    "#": {
+      "item": "clean_cut:living_steel"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "clean_cut:carrion_cleaver",
+    "count": 1
+  }
+}
