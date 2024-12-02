@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:phantom_membrane"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "clean_cut:meats"
+    }
+  ],
+  "result": {
+    "id": "clean_cut:living_steel",
+    "count": 2
+  }
+}

@@ -1,13 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#",
-    "#",
-    "/"
+    "#N",
+    "#E",
+    "N/"
   ],
   "key": {
     "#": {
       "item": "clean_cut:living_steel"
+    },
+    "N": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
     },
     "/": {
       "item": "minecraft:stick"

@@ -77,7 +77,9 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
             setBloodCharge(stack, charge - BLOOD_ABILITY_USAGE)
         }
 
-        onThrow(stack, world, user, charge)
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
+            if(getIsActive(stack) && user is PlayerEntity) user.useRiptide(20, 6f, stack)
+        } else onThrow(stack, world, user, charge)
 
         super.onStoppedUsing(stack, world, user, remainingUseTicks)
     }
@@ -91,9 +93,11 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
             if(entity is LivingEntity) {
                 entity.addStatusEffect(StatusEffectInstance(StatusEffects.SPEED, 5, 2, true, false))
-                entity.addStatusEffect(StatusEffectInstance(StatusEffects.STRENGTH, 5, 1, true, false))
-                entity.addStatusEffect(StatusEffectInstance(StatusEffects.RESISTANCE, 5, 1, true, false))
                 entity.addStatusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 5, 0, true, false))
+            }
+
+            if(entity is PlayerEntity && entity.isUsingRiptide) {
+                entity.velocity = entity.rotationVector
             }
 
             if(getBloodCharge(stack) <= 0.0001f) {
