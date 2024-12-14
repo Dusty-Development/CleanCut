@@ -22,6 +22,7 @@ object CleanCutClient : ClientModInitializer {
         ModelLoadingPluginManager.registerPlugin(CustomModelLoadingPlugin())
         ClientSetup.registerExtraBakedModels(CustomModelLoadingPlugin.MODELS::add)
 
+        ModParticles.registerClientParticles()
         ReloadListenerRegistry.register(ResourceType.CLIENT_RESOURCES, EffekAssetLoader(), Identifier.of(CleanCut.MOD_ID, "effeks"))
     }
 

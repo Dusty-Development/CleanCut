@@ -10,13 +10,19 @@
   "item.clean_cut.living_steel": "Living Steel",
   "tooltip.clean_cut.living_steel.tooltip": "Its made of flesh, there like a 50% chance you could eat it.",
 
+  "block.clean_cut.flesh": "Flesh Block",
+  "block.clean_cut.carrion_bone": "Carrion Bone Block",
+  "block.clean_cut.compacted_living_steel": "Compacted Living Steel Block",
+  "block.clean_cut.dented_living_steel": "Dented Living Steel Block",
+  "block.clean_cut.seething_lantern": "Seething Lantern",
+
   "enchantment.clean_cut.huntress": "Huntress",
   "enchantment.clean_cut.nursing": "Nursing",
   "enchantment.clean_cut.charlatan": "Charlatan",
   "enchantment.clean_cut.bloodrush": "Bloodrush",
 
   "enchantment.clean_cut.huntress.desc": "Your victim can be seen through walls, and their footsteps are seen clearly. When your victim dies, no one will know they died at you hands.",
-  "enchantment.clean_cut.nursing.desc": "Now when throwing the cleaver at your victim, it will give you a two hearts, and steal every effect they had, good or bad. But will now give your cleaver a cooldown for each throw.",
+  "enchantment.clean_cut.nursing.desc": "Now when throwing the cleaver at your victim, it will give you a heart, and you and your victims effects will swap, good or bad. But will now give your cleaver a cooldown for each throw.",
   "enchantment.clean_cut.charlatan.desc": "You can now throw your cleaver in two ways. When normally throwing, the cleaver will now auto aim, and hit three victims that are close by, before coming back to you. When sneaking and throwing, it will circle around you for 1 minute, then it will return to you.",
   "enchantment.clean_cut.bloodrush.desc": "Filling your blood charge will now Automatically put you into a frenzy, allowing you to use your cleaver like a riptide trident. But this will only last as long as you keep the blood charge up. And now when attacking your victim, it will stop there momentum."
 }

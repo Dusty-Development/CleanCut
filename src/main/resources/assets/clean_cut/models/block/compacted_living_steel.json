@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "clean_cut:block/compacted_living_steel"
+  }
+}

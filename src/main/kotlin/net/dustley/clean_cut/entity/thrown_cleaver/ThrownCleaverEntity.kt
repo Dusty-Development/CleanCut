@@ -4,8 +4,10 @@ import net.dustley.clean_cut.entity.ModEntities
 import net.dustley.clean_cut.item.ModItems
 import net.dustley.clean_cut.item.cleaver.CarrionCleaverItem
 import net.dustley.clean_cut.item.cleaver.CleaverEnchantmentType
+import net.dustley.clean_cut.particle.ModParticles
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.client.MinecraftClient
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.FlyingItemEntity
 import net.minecraft.entity.LivingEntity
@@ -34,6 +36,7 @@ import net.minecraft.world.World
 class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : PersistentProjectileEntity(ModEntities.THROWN_CLEAVER, world), FlyingItemEntity {
 
     // Stats
+    var thrownCleaverSoundInstance:ThrownCleaverSoundInstance? = null
     private var dealtDamage = false
 
     // Animation state
@@ -55,16 +58,27 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
         this.setPosition(livingEntity.eyePos.add(livingEntity.getRotationVec(1.0f).multiply(-0.25)).subtract(0.0,height.toDouble() * 0.5,0.0))
         this.setNoGravity(true)
         velocity = livingEntity.getRotationVec(1.0f).multiply(power)
+
     }
 
     // EVENTS //
     override fun tick() {
 //        if(world.isClient) AAALevel.addParticle(world, true, TRAIL_PARTICLE.clone().position(pos.add(0.0,(height/2f).toDouble(),0.0)).scale(0.05f))
 
+        for(i in 0..random.nextBetween(0,2)) {
+            world.addParticle(ModParticles.BLOOD_DRIP_PARTICLE, x, y, z, velocity.x * 0.1f, velocity.y * 0.1f, velocity.z * 0.1f)
+        }
+
+        if(thrownCleaverSoundInstance == null && world.isClient) {
+            thrownCleaverSoundInstance = MinecraftClient.getInstance().player?.let { ThrownCleaverSoundInstance(this, it ) }
+            MinecraftClient.getInstance().soundManager.play(thrownCleaverSoundInstance)
+        }
+
         if (this.inGroundTime > HOLD_MAX_TIME && !this.dealtDamage) {
             this.dealtDamage = true
             isReturning = true
         }
+
 
         if(returnTimer > 0) returnTimer--
         if(returnTimer <= 0 && !isReturning) setToReturn()
@@ -73,11 +87,12 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
             inGround = false
             isNoClip = true
             dealtDamage = true
+            attackEntitiesNearby()
 
-            val difference = (pos.relativize(owner?.pos ?: pos))
+            val difference = (pos.relativize(owner?.eyePos ?: pos))
 
-            addVelocity(difference.normalize().multiply(0.5))
-            val speed = Math.clamp(velocity.length(), 0.0, 2.0)
+            addVelocity(difference.normalize().multiply(0.75))
+            val speed = Math.clamp(velocity.length(), 0.0, 3.0)
             velocity = velocity.normalize().multiply(speed)
         }
 
@@ -91,8 +106,8 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
         super.tick()
     }
     fun setToReturn() {
+        if(!isReturning) holdTimer = HOLD_MAX_TIME
         isReturning = true
-        holdTimer = HOLD_MAX_TIME
     }
     fun attackEntitiesNearby() {
         val posA = pos.subtract(Vec3d(1.0,1.0,1.0))
@@ -162,6 +177,7 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
                     playHitEntityEffects()
 
                     setToReturn()
+                    dealtDamage = true
                     hitEntity = true
 
                 }

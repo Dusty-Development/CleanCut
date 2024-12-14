@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "clean_cut:block/lantern/seething_lantern"
+    },
+    "hanging=true": {
+      "model": "clean_cut:block/lantern/hanging_seething_lantern"
+    }
+  }
+}

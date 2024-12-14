@@ -15,7 +15,7 @@ object ModEntities {
     val THROWN_CLEAVER: EntityType<ThrownCleaverEntity> =
         Registry.register<EntityType<*>, EntityType<ThrownCleaverEntity>>(
             Registries.ENTITY_TYPE,
-            CleanCut.id("thrown_cleaver"),
+            CleanCut.identifier("thrown_cleaver"),
             EntityType.Builder.create(
                 (EntityType.EntityFactory {
                         _: EntityType<ThrownCleaverEntity>,

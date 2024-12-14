@@ -8,7 +8,7 @@
       "item": "minecraft:iron_ingot"
     },
     {
-      "item": "clean_cut:meats"
+      "tag": "clean_cut:meats"
     }
   ],
   "result": {

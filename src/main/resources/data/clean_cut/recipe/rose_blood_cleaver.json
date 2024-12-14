@@ -5,7 +5,7 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:rose_bush"
+      "tag": "minecraft:flowers"
     },
     "C": {
       "item": "clean_cut:carrion_cleaver"

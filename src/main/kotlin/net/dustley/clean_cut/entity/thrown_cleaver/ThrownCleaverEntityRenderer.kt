@@ -1,5 +1,6 @@
 package net.dustley.clean_cut.entity.thrown_cleaver
 
+import net.dustley.clean_cut.item.ModItems
 import net.minecraft.client.render.OverlayTexture
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.entity.EntityRendererFactory
@@ -40,18 +41,33 @@ class ThrownCleaverEntityRenderer(ctx: EntityRendererFactory.Context) : FlyingIt
 
         matrixStackIn.scale(scale, scale, scale)
 
-
         // Render the item
-        itemRenderer?.renderItem(
-            entityIn.asPublicItemStack(),
-            ModelTransformationMode.FIXED,
-            packedLightIn,
-            OverlayTexture.DEFAULT_UV,
-            matrixStackIn,
-            bufferIn,
-            entityIn.world,
-            entityIn.id
-        )
+        if(entityIn.isRose) {
+            itemRenderer?.renderItem(
+                ModItems.ROSE_BLOOD_CLEAVER.defaultStack,
+                ModelTransformationMode.FIXED,
+                packedLightIn,
+                OverlayTexture.DEFAULT_UV,
+                matrixStackIn,
+                bufferIn,
+                entityIn.world,
+                entityIn.id
+            )
+        } else {
+            itemRenderer?.renderItem(
+                ModItems.CLEAVER_OF_THE_CARRION.defaultStack,
+                ModelTransformationMode.FIXED,
+                packedLightIn,
+                OverlayTexture.DEFAULT_UV,
+                matrixStackIn,
+                bufferIn,
+                entityIn.world,
+                entityIn.id
+            )
+        }
+
+
+
 
         matrixStackIn.pop()
     }

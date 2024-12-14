@@ -5,9 +5,11 @@ import net.dustley.clean_cut.component.ModItemComponents
 import net.dustley.clean_cut.enchantment.ModEnchantments
 import net.dustley.clean_cut.entity.thrown_cleaver.ThrownCleaverEntity
 import net.dustley.clean_cut.item.ModItems
+import net.dustley.clean_cut.particle.ModParticles
 import net.dustley.clean_cut.util.MialeeText
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.world.ClientWorld
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.AttributeModifierSlot
 import net.minecraft.component.type.AttributeModifiersComponent
@@ -32,6 +34,8 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
@@ -50,7 +54,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
         if(attacker.fallDistance >= 0.01f) onCrit(stack, target, attacker)
 
-        if(getIsActive(stack)) {
+        if(getIsActive(stack) && getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
             target.setVelocity(0.0, 0.0, 0.0)
             target.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 5, 2, true, false))
         }
@@ -69,7 +73,8 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         val charge = getBloodCharge(stack)
 
         if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
-            if(getBloodCharge(stack) > 0.75f) setIsActive(stack,true)
+            if(getBloodCharge(stack) > 0.6f) setIsActive(stack,true)
+//            setIsActive(stack,true)
         }
 
 //        if(charge >= BLOOD_ABILITY_USAGE) setBloodCharge(stack, charge - BLOOD_ABILITY_USAGE)
@@ -102,8 +107,10 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
                 val velocityDirection = entity.velocity.normalize()
                 val velocityTarget = entity.rotationVector.normalize()
 
-                entity.velocity = velocityDirection.lerp(velocityTarget, 0.2).multiply(2.5)
+                entity.velocity = velocityDirection.lerp(velocityTarget, 0.2).multiply(2.0)
                 drainageAmount *= 2
+
+                spawnDashParticles(entity, entity.velocity.normalize())
             }
         }
 
@@ -116,13 +123,43 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         }
     }
 
-    private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
+    fun spawnDashParticles(entity: LivingEntity, dashDirection: Vec3d) {
+        val world = entity.world
+        if (world is ClientWorld) {
+            val radius = 1.0 // Circle radius
+            val particleCount = world.random.nextBetween(0,50) //20 // Number of particles in the circle
+            val direction = dashDirection.normalize()
 
+            // Calculate a perpendicular vector to the dash direction
+            val up = Vec3d(0.0, 1.0, 0.0) // Assume "up" for simplicity
+            val perpVector = direction.crossProduct(up).normalize()
+
+            for (i in 0 until particleCount) {
+                // Angle for each particle
+                val angle = (i / particleCount.toDouble()) * 2 * Math.PI
+                val xOffset = MathHelper.cos(angle.toFloat()) * radius
+                val zOffset = MathHelper.sin(angle.toFloat()) * radius
+
+                // Rotate the circle to align with the dash direction
+                val rotatedOffset = perpVector.multiply(xOffset).add(direction.crossProduct(perpVector).multiply(zOffset))
+
+                val particlePos = entity.pos.add(rotatedOffset)
+
+                // Spawn the particle
+                world.addParticle(
+                    ModParticles.BLOOD_DASH_PARTICLE,
+                    particlePos.x, particlePos.y, particlePos.z,
+                    entity.velocity.x, entity.velocity.y,entity.velocity.z // Speed
+                )
+            }
+        }
+    }
+
+    private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
         val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose())
         entity.enchantmentType = getEnchantmentType(stack)
         stack.decrement(1)
         world.spawnEntity(entity)
-
     }
 
     private fun getEnchantmentType(stack: ItemStack):CleaverEnchantmentType {
@@ -130,8 +167,8 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
             val key = it.key.get()
             when (key) {
                 ModEnchantments.BLOODRUSH -> return CleaverEnchantmentType.BLOOD_RUSH
-                ModEnchantments.CHARLATAN -> return CleaverEnchantmentType.CHARLATAN
-                ModEnchantments.HUNTRESS -> return CleaverEnchantmentType.HUNTRESS
+//                ModEnchantments.CHARLATAN -> return CleaverEnchantmentType.CHARLATAN
+//                ModEnchantments.HUNTRESS -> return CleaverEnchantmentType.HUNTRESS
                 ModEnchantments.NURSING -> return CleaverEnchantmentType.NURSING
             }
         }
@@ -141,12 +178,16 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
     private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
         if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH && getIsActive(stack)) {
             if(user is PlayerEntity) user.itemCooldownManager.set(this, 20)
-            user.velocity = user.rotationVector.multiply(2.5)
+            user.velocity = user.rotationVector
             if (getIsActive(stack) && user is PlayerEntity) user.useRiptide(20, 8f, stack)
         }
 
         if(getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS) {
             if (getIsActive(stack)) CleanCut.LOGGER.info("A")
+        }
+
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.NURSING) {
+            if(user is PlayerEntity) user.itemCooldownManager.set(this, 80)
         }
 
         if(!(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH || getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS)) onThrow(stack, world, user, 1f)
@@ -170,7 +211,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
     // VISUALS //
     override fun getUseAction(stack: ItemStack): UseAction = if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH || getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS) UseAction.BOW else UseAction.SPEAR
-    override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < BLOOD_ABILITY_USAGE || getIsActive(stack) }
+    override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < 0.99f || getIsActive(stack) }
     override fun getItemBarStep(stack: ItemStack): Int = Math.round(getBloodCharge(stack) * 13.0).toInt()
     override fun getItemBarColor(stack: ItemStack): Int = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
 
