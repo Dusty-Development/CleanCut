@@ -55,10 +55,6 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
             target.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 5, 2, true, false))
         }
 
-        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
-            if(getBloodCharge(stack) > 0.99f) setIsActive(stack,true)
-        }
-
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
@@ -72,35 +68,48 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
         val charge = getBloodCharge(stack)
 
-        if(charge >= BLOOD_ABILITY_USAGE) {
-            onAbility(stack, world, user, charge)
-            setBloodCharge(stack, charge - BLOOD_ABILITY_USAGE)
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
+            if(getBloodCharge(stack) > 0.75f) setIsActive(stack,true)
         }
 
-        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
-            if(getIsActive(stack) && user is PlayerEntity) user.useRiptide(20, 6f, stack)
-        } else onThrow(stack, world, user, charge)
+//        if(charge >= BLOOD_ABILITY_USAGE) setBloodCharge(stack, charge - BLOOD_ABILITY_USAGE)
+        onAbility(stack, world, user, charge)
 
         super.onStoppedUsing(stack, world, user, remainingUseTicks)
     }
 
     override fun inventoryTick(stack: ItemStack, world: World, entity: Entity, slot: Int, selected: Boolean) {
         super.inventoryTick(stack, world, entity, slot, selected)
+        var drainageAmount = BLOOD_DRAIN_USAGE
+        if (!selected) drainageAmount = BLOOD_DRAIN_USAGE * 0.5f
 
-        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH && getIsActive(stack)) {
-            if(selected) setBloodCharge(stack,getBloodCharge(stack) - (BLOOD_DRAIN_USAGE * 0.5f))
-            else setBloodCharge(stack,getBloodCharge(stack) - BLOOD_DRAIN_USAGE)
+        if(entity is PlayerEntity && selected && !world.isClient) {
+            val color = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
+            val percentage = if(stack.get(ModItemComponents.BLOOD_CHARGE) != null) (stack.get(ModItemComponents.BLOOD_CHARGE)!! * 100f).toInt() else 0
+            val text = Text.literal("Blood: ").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.literal("$percentage%").setStyle(EMPTY), color))
+            entity.sendMessage(text, true)
+        }
 
-            if(entity is LivingEntity) {
-                entity.addStatusEffect(StatusEffectInstance(StatusEffects.SPEED, 5, 2, true, false))
-                entity.addStatusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 5, 0, true, false))
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
+            if(getIsActive(stack)) {
+                if (entity is LivingEntity) {
+                    entity.addStatusEffect(StatusEffectInstance(StatusEffects.SPEED, 5, 2, true, false))
+                    entity.addStatusEffect(StatusEffectInstance(StatusEffects.REGENERATION, 5, 0, true, false))
+                }
             }
 
-            if(entity is PlayerEntity && entity.isUsingRiptide) {
-                entity.velocity = entity.rotationVector
-            }
+            if (entity is LivingEntity && entity.isUsingRiptide) {
+                val velocityDirection = entity.velocity.normalize()
+                val velocityTarget = entity.rotationVector.normalize()
 
-            if(getBloodCharge(stack) <= 0.0001f) {
+                entity.velocity = velocityDirection.lerp(velocityTarget, 0.2).multiply(2.5)
+                drainageAmount *= 2
+            }
+        }
+
+        if(getIsActive(stack)) {
+            setBloodCharge(stack, getBloodCharge(stack) - drainageAmount)
+            if (getBloodCharge(stack) <= 0.0001f) {
                 setIsActive(stack, false)
                 setBloodCharge(stack, 0f)
             }
@@ -108,10 +117,6 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
     }
 
     private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
-
-        if(getEnchantmentType(stack) == CleaverEnchantmentType.NURSING) {
-
-        }
 
         val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose())
         entity.enchantmentType = getEnchantmentType(stack)
@@ -134,7 +139,17 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
     }
 
     private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH && getIsActive(stack)) {
+            if(user is PlayerEntity) user.itemCooldownManager.set(this, 20)
+            user.velocity = user.rotationVector.multiply(2.5)
+            if (getIsActive(stack) && user is PlayerEntity) user.useRiptide(20, 8f, stack)
+        }
 
+        if(getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS) {
+            if (getIsActive(stack)) CleanCut.LOGGER.info("A")
+        }
+
+        if(!(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH || getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS)) onThrow(stack, world, user, 1f)
     }
 
     private fun onCrit(stack: ItemStack, target: LivingEntity, attacker: LivingEntity) {
@@ -154,7 +169,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
     override fun canRepair(stack: ItemStack, ingredient: ItemStack): Boolean = ingredient.item == ModItems.LIVING_STEEL
 
     // VISUALS //
-    override fun getUseAction(stack: ItemStack?): UseAction = UseAction.SPEAR
+    override fun getUseAction(stack: ItemStack): UseAction = if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH || getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS) UseAction.BOW else UseAction.SPEAR
     override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < BLOOD_ABILITY_USAGE || getIsActive(stack) }
     override fun getItemBarStep(stack: ItemStack): Int = Math.round(getBloodCharge(stack) * 13.0).toInt()
     override fun getItemBarColor(stack: ItemStack): Int = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
@@ -181,11 +196,11 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
     companion object {
 
-        val BLOOD_GAIN_PROJECTILE = 0.1f // How much of the blood is gained when killing an entity
-        val BLOOD_GAIN_KILL = 0.42f // How much of the blood is gained when killing an entity
-        val BLOOD_GAIN_CRIT = 0.09f // How much of the blood is gained when crit an entity
+        val BLOOD_GAIN_PROJECTILE = 0.2f // How much of the blood is gained when its a projectile
+        val BLOOD_GAIN_KILL = 0.03f // How much of the blood is gained when killing an entity
+        val BLOOD_GAIN_CRIT = 0.01f // How much of the blood is gained when crit an entity
         val BLOOD_GAIN_HIT = 0.01f // How much of the blood is gained when hitting an entity
-        val BLOOD_ABILITY_USAGE = 1.0f // How much of the blood is used up when using an ability
+        val BLOOD_ABILITY_USAGE = 0.25f // How much of the blood is used up when using an ability
 
         val BLOOD_DRAIN_USAGE = 0.005f // How much of the blood is used up when activated by bloodrush
 
