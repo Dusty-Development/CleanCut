@@ -1,4 +1,4 @@
-package net.dustley.clean_cut.particle.huntress
+package net.dustley.clean_cut.particle.blood
 
 import net.dustley.clean_cut.particle.ModParticles
 import net.fabricmc.api.EnvType

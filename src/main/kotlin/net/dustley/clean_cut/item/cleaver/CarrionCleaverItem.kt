@@ -73,8 +73,8 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         val charge = getBloodCharge(stack)
 
         if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH) {
+            if(user.isInCreativeMode) setIsActive(stack,true) else
             if(getBloodCharge(stack) > 0.6f) setIsActive(stack,true)
-//            setIsActive(stack,true)
         }
 
 //        if(charge >= BLOOD_ABILITY_USAGE) setBloodCharge(stack, charge - BLOOD_ABILITY_USAGE)

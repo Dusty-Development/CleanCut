@@ -2,6 +2,7 @@ package net.dustley.clean_cut.block
 
 import net.dustley.clean_cut.CleanCut
 import net.dustley.clean_cut.block.lantern.SeethingLanternBlock
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.block.AbstractBlock
@@ -10,6 +11,7 @@ import net.minecraft.block.MapColor
 import net.minecraft.block.PillarBlock
 import net.minecraft.block.enums.NoteBlockInstrument
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.client.render.RenderLayer
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroups
@@ -33,9 +35,8 @@ object ModBlocks {
 
     val SEETHING_LANTERN: Block = registerBlock("seething_lantern",
         SeethingLanternBlock(
-            AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).solid().requiresTool().strength(3.5f)
-                .sounds(BlockSoundGroup.LANTERN).luminance { 13 }
-                .nonOpaque().pistonBehavior(PistonBehavior.DESTROY)
+            AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(3.5f)
+            .nonOpaque().sounds(BlockSoundGroup.LANTERN).luminance { 13 }.pistonBehavior(PistonBehavior.DESTROY)
         ))
 
     private fun registerBlockWithoutBlockItem(name: String, block: Block): Block {
@@ -65,5 +66,9 @@ object ModBlocks {
                 entries.add(DENTED_LIVING_STEEL)
                 entries.add(SEETHING_LANTERN)
             })
+    }
+
+    fun registerClientModBlocks() {
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), SEETHING_LANTERN)
     }
 }

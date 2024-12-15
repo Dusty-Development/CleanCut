@@ -1,4 +1,4 @@
-package net.dustley.clean_cut.particle.huntress
+package net.dustley.clean_cut.particle.blood
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -11,55 +11,49 @@ import org.joml.Quaternionf
 
 class BloodSplatParticle(world: ClientWorld?, x: Double, y: Double, z: Double, private var sprites: SpriteProvider?, velocityX: Double, velocityY: Double, velocityZ: Double) : SpriteBillboardParticle(world, x, y, z, velocityX, velocityY, velocityZ) {
 
-    var rotation = (random.nextDouble() * 360.0) - 180.0
+    private var rotation = (random.nextDouble() * 360.0) - 180.0
 
     init {
-        this.setBoundingBoxSpacing(0.01f, 0.01f)
         this.gravityStrength = 0f
-        this.collidesWithWorld = false;
-        this.maxAge = ((124.0 / (Math.random() * 0.8 + 0.2)).toInt())
+        this.maxAge = ((600.0 + (Math.random() * 0.8 + 0.2) * 20).toInt())
         this.scale = (random.nextFloat() * 0.25f) + 0.1f
         this.setSpriteForAge(sprites)
     }
 
     override fun buildGeometry(vertexConsumer: VertexConsumer?, camera: Camera?, tickDelta: Float) {
-        val offset = 0.001f
+        val offset = 0.01f
 
-        this.setPos(x,y+offset,z)
-        this.method_60373(vertexConsumer, camera, Quaternionf().rotateY(Math.toRadians(rotation).toFloat()).rotateX(Math.toRadians(-90.0).toFloat()), tickDelta)
-        this.setPos(x,y-(offset*2),z)
-        this.method_60373(vertexConsumer, camera, Quaternionf().rotateY(Math.toRadians(-rotation).toFloat()).rotateX(Math.toRadians(90.0).toFloat()), tickDelta)
-        this.setPos(x,y+offset,z)
+        this.setPos(x,y + offset,z)
+        this.method_60373(vertexConsumer, camera, Quaternionf().rotateY(Math.toRadians(rotation).toFloat()).rotateX(Math.toRadians(-90.0).toFloat()), 1f)
+        this.setPos(x,y - (offset*2),z)
+        this.method_60373(vertexConsumer, camera, Quaternionf().rotateY(Math.toRadians(-rotation).toFloat()).rotateX(Math.toRadians(90.0).toFloat()), 1f)
+        this.setPos(x,y + offset,z)
     }
 
     override fun getRotator(): Rotator? = Rotator.ALL_AXIS
 
     override fun tick() {
-        this.prevPosX = this.x
-        this.prevPosY = this.y
-        this.prevPosZ = this.z
-
         this.updateAge()
-
-        if (!this.dead) {
-            this.updateVelocity()
-        }
-
     }
 
-    fun updateAge() {
-        if (maxAge-- <= 0) {
+    private fun updateAge() {
+        val fadeTicks = 60
+
+        age += 1
+
+        this.alpha = when {
+            this.age >= this.maxAge -> 0f // Particle is expired
+            this.age >= this.maxAge - fadeTicks -> (this.maxAge - this.age).toFloat() / fadeTicks // Fade out
+            this.age < this.maxAge - fadeTicks -> 1f
+            else -> 1f // Fully visible
+        }
+
+        if (this.age >= this.maxAge) {
             this.markDead()
         }
     }
 
-    fun updateVelocity() {
-        if (this.onGround) {
-            this.setVelocity(0.0,0.0,0.0)
-        }
-    }
-
-    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_OPAQUE
+    override fun getType(): ParticleTextureSheet = ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT
 
     companion object {
         @Environment(EnvType.CLIENT)

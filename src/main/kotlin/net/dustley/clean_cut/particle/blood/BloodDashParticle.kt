@@ -1,4 +1,4 @@
-package net.dustley.clean_cut.particle.huntress
+package net.dustley.clean_cut.particle.blood
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -13,7 +13,7 @@ class BloodDashParticle(world: ClientWorld?, x: Double, y: Double, z: Double, pr
     init {
         this.gravityStrength = 0f
         this.maxAge = ((20.0 / (Math.random() * 0.8 + 0.2)).toInt())
-        this.scale = (random.nextFloat() * 0.1f) + 0.15f
+        this.scale = (random.nextFloat() * 0.05f) + 0.05f
         this.setSpriteForAge(sprites)
     }
 

@@ -1,15 +1,12 @@
 package net.dustley.clean_cut
 
-import dev.architectury.registry.ReloadListenerRegistry
-import mod.chloeprime.aaaparticles.client.loader.EffekAssetLoader
+import net.dustley.clean_cut.block.ModBlocks
 import net.dustley.clean_cut.client.ClientSetup
 import net.dustley.clean_cut.client.CustomModelLoadingPlugin
 import net.dustley.clean_cut.entity.ModEntities
 import net.dustley.clean_cut.particle.ModParticles
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.impl.client.model.loading.ModelLoadingPluginManager
-import net.minecraft.resource.ResourceType
-import net.minecraft.util.Identifier
 
 object CleanCutClient : ClientModInitializer {
 
@@ -21,9 +18,10 @@ object CleanCutClient : ClientModInitializer {
         ClientSetup.clientSetup()
         ModelLoadingPluginManager.registerPlugin(CustomModelLoadingPlugin())
         ClientSetup.registerExtraBakedModels(CustomModelLoadingPlugin.MODELS::add)
+        ModBlocks.registerClientModBlocks()
 
         ModParticles.registerClientParticles()
-        ReloadListenerRegistry.register(ResourceType.CLIENT_RESOURCES, EffekAssetLoader(), Identifier.of(CleanCut.MOD_ID, "effeks"))
+//        ReloadListenerRegistry.register(ResourceType.CLIENT_RESOURCES, EffekAssetLoader(), Identifier.of(CleanCut.MOD_ID, "effeks"))
     }
 
 }

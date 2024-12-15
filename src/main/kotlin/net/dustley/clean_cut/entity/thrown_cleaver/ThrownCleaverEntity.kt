@@ -49,6 +49,7 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
 
     // Animation timers
     var returnTimer: Int = RETURN_MAX_TIME
+    var hitTimer = 0
     var holdTimer:Int = 0
 
     constructor(livingEntity: LivingEntity, world: World, power: Double, atkDamage:Double, weaponItem:ItemStack, isRose:Boolean) : this(world, isRose) {
@@ -66,7 +67,7 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
 //        if(world.isClient) AAALevel.addParticle(world, true, TRAIL_PARTICLE.clone().position(pos.add(0.0,(height/2f).toDouble(),0.0)).scale(0.05f))
 
         for(i in 0..random.nextBetween(0,2)) {
-            world.addParticle(ModParticles.BLOOD_DRIP_PARTICLE, x, y, z, velocity.x * 0.1f, velocity.y * 0.1f, velocity.z * 0.1f)
+            world.addParticle(ModParticles.BLOOD_DRIP_PARTICLE, true, x, y, z, velocity.x * 0.1f, velocity.y * 0.1f, velocity.z * 0.1f)
         }
 
         if(thrownCleaverSoundInstance == null && world.isClient) {
@@ -87,7 +88,7 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
             inGround = false
             isNoClip = true
             dealtDamage = true
-            attackEntitiesNearby()
+
 
             val difference = (pos.relativize(owner?.eyePos ?: pos))
 
@@ -96,7 +97,8 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
             velocity = velocity.normalize().multiply(speed)
         }
 
-        if(!dealtDamage) attackEntitiesNearby()
+        if(hitTimer > 0) hitTimer -= 1
+        if(hitTimer <= 0) attackEntitiesNearby()
 
         if(holdTimer > 0) {
             holdTimer--
@@ -177,6 +179,7 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
                     playHitEntityEffects()
 
                     setToReturn()
+                    hitTimer = 10
                     dealtDamage = true
                     hitEntity = true
 

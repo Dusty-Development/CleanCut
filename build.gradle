@@ -36,8 +36,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	modImplementation "maven.modrinth:aaa-particles:${project.aaa_particle_version}"
-	modImplementation "maven.modrinth:architectury-api:${project.architecture_version}+fabric"
+//	modImplementation "maven.modrinth:aaa-particles:${project.aaa_particle_version}"
+//	modImplementation "maven.modrinth:architectury-api:${project.architecture_version}+fabric"
 
 	// Cardinal Components
 //	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.project.cca_version}"
