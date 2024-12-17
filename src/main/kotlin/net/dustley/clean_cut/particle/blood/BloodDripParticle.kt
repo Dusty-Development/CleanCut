@@ -46,7 +46,7 @@ class BloodDripParticle(world: ClientWorld?, x: Double, y: Double, z: Double, pr
     fun updateVelocity() {
         if (this.onGround) {
             this.markDead()
-            world.addParticle(ModParticles.BLOOD_SPLAT_PARTICLE, this.x, this.y, this.z, 0.0, 0.0, 0.0)
+            world.addParticle(ModParticles.BLOOD_SPLAT_PARTICLE, true, this.x, this.y, this.z, 0.0, 0.0, 0.0)
         }
     }
 

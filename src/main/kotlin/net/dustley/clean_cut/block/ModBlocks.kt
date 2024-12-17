@@ -2,6 +2,7 @@ package net.dustley.clean_cut.block
 
 import net.dustley.clean_cut.CleanCut
 import net.dustley.clean_cut.block.lantern.SeethingLanternBlock
+import net.dustley.clean_cut.item.ModItems
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
@@ -57,6 +58,15 @@ object ModBlocks {
 
     fun registerModBlocks() {
         CleanCut.LOGGER.info("Registering Mod Blocks for " + CleanCut.MOD_ID)
+
+        ItemGroupEvents.modifyEntriesEvent(ModItems.CLEAN_CUT_ITEM_GROUP_KEY)
+            .register(ItemGroupEvents.ModifyEntries { entries: FabricItemGroupEntries ->
+                entries.add(FLESH)
+                entries.add(CARRION_BONE)
+                entries.add(COMPACTED_LIVING_STEEL)
+                entries.add(DENTED_LIVING_STEEL)
+                entries.add(SEETHING_LANTERN)
+            })
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS)
             .register(ItemGroupEvents.ModifyEntries { entries: FabricItemGroupEntries ->

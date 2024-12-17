@@ -1,4 +1,6 @@
 {
+  "itemGroup.clean_cut": "Clean Cut",
+
   "item.clean_cut.carrion_cleaver": "Cleaver of the Carrion",
   "tooltip.clean_cut.carrion_cleaver": "Peace is a luxury, death is the normality.",
   "tooltip.clean_cut.carrion_cleaver.shift": "§7[Shift]",

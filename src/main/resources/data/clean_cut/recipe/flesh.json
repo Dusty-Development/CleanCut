@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "clean_cut:meats"
+  },
+  "result": {
+    "id": "clean_cut:flesh",
+    "count": 1
+  }
+}

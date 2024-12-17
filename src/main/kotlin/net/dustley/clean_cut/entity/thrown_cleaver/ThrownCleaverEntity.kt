@@ -1,6 +1,5 @@
 package net.dustley.clean_cut.entity.thrown_cleaver
 
-import net.dustley.clean_cut.entity.ModEntities
 import net.dustley.clean_cut.item.ModItems
 import net.dustley.clean_cut.item.cleaver.CarrionCleaverItem
 import net.dustley.clean_cut.item.cleaver.CleaverEnchantmentType
@@ -9,6 +8,7 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.FlyingItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.data.DataTracker
@@ -33,7 +33,8 @@ import net.minecraft.world.World
 
 //https://github.com/dainxt/WeaponThrow/blob/fabric-1.18.2/src/main/java/com/dainxt/weaponthrow/projectile/WeaponThrowEntity.java
 
-class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : PersistentProjectileEntity(ModEntities.THROWN_CLEAVER, world), FlyingItemEntity {
+class ThrownCleaverEntity(world: World, val isRose:Boolean, entityType: EntityType<out PersistentProjectileEntity>?
+) : PersistentProjectileEntity(entityType, world), FlyingItemEntity {
 
     // Stats
     var thrownCleaverSoundInstance:ThrownCleaverSoundInstance? = null
@@ -52,7 +53,7 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean = false) : Persistent
     var hitTimer = 0
     var holdTimer:Int = 0
 
-    constructor(livingEntity: LivingEntity, world: World, power: Double, atkDamage:Double, weaponItem:ItemStack, isRose:Boolean) : this(world, isRose) {
+    constructor(livingEntity: LivingEntity, world: World, power: Double, atkDamage:Double, weaponItem:ItemStack, isRose:Boolean, entityType: EntityType<out PersistentProjectileEntity>?) : this(world, isRose, entityType) {
         this.owner = livingEntity
         damage = atkDamage + 1.0;
         stack = weaponItem

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "clean_cut:living_steel"
+  },
+  "result": {
+    "id": "clean_cut:carrion_bone",
+    "count": 6
+  }
+}

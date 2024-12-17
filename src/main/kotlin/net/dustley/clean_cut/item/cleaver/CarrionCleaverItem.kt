@@ -3,6 +3,7 @@ package net.dustley.clean_cut.item.cleaver
 import net.dustley.clean_cut.CleanCut
 import net.dustley.clean_cut.component.ModItemComponents
 import net.dustley.clean_cut.enchantment.ModEnchantments
+import net.dustley.clean_cut.entity.ModEntities
 import net.dustley.clean_cut.entity.thrown_cleaver.ThrownCleaverEntity
 import net.dustley.clean_cut.item.ModItems
 import net.dustley.clean_cut.particle.ModParticles
@@ -88,7 +89,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         var drainageAmount = BLOOD_DRAIN_USAGE
         if (!selected) drainageAmount = BLOOD_DRAIN_USAGE * 0.5f
 
-        if(entity is PlayerEntity && selected && !world.isClient) {
+        if(entity is PlayerEntity && selected && !world.isClient && hasBloodChargeEnchant(stack)) {
             val color = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
             val percentage = if(stack.get(ModItemComponents.BLOOD_CHARGE) != null) (stack.get(ModItemComponents.BLOOD_CHARGE)!! * 100f).toInt() else 0
             val text = Text.literal("Blood: ").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.literal("$percentage%").setStyle(EMPTY), color))
@@ -156,7 +157,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
     }
 
     private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
-        val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose())
+        val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose(), if(isRose()) ModEntities.THROWN_ROSE_CLEAVER else ModEntities.THROWN_REGULAR_CLEAVER)
         entity.enchantmentType = getEnchantmentType(stack)
         stack.decrement(1)
         world.spawnEntity(entity)
@@ -175,15 +176,24 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
         return CleaverEnchantmentType.NONE
     }
 
+    private fun hasBloodChargeEnchant(stack: ItemStack):Boolean {
+        EnchantmentHelper.getEnchantments(stack).enchantments.forEach {
+            val key = it.key.get()
+            when (key) {
+                ModEnchantments.BLOODRUSH -> return true
+//                ModEnchantments.CHARLATAN -> return CleaverEnchantmentType.CHARLATAN
+//                ModEnchantments.HUNTRESS -> return CleaverEnchantmentType.HUNTRESS
+                ModEnchantments.NURSING -> return false
+            }
+        }
+        return false
+    }
+
     private fun onAbility(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
         if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH && getIsActive(stack)) {
             if(user is PlayerEntity) user.itemCooldownManager.set(this, 20)
             user.velocity = user.rotationVector
             if (getIsActive(stack) && user is PlayerEntity) user.useRiptide(20, 8f, stack)
-        }
-
-        if(getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS) {
-            if (getIsActive(stack)) CleanCut.LOGGER.info("A")
         }
 
         if(getEnchantmentType(stack) == CleaverEnchantmentType.NURSING) {
@@ -211,7 +221,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
     // VISUALS //
     override fun getUseAction(stack: ItemStack): UseAction = if(getEnchantmentType(stack) == CleaverEnchantmentType.BLOOD_RUSH || getEnchantmentType(stack) == CleaverEnchantmentType.HUNTRESS) UseAction.BOW else UseAction.SPEAR
-    override fun isItemBarVisible(stack: ItemStack): Boolean { return getBloodCharge(stack) < 0.99f || getIsActive(stack) }
+    override fun isItemBarVisible(stack: ItemStack): Boolean { return (getBloodCharge(stack) < 0.99f || getIsActive(stack)) && hasBloodChargeEnchant(stack)}
     override fun getItemBarStep(stack: ItemStack): Int = Math.round(getBloodCharge(stack) * 13.0).toInt()
     override fun getItemBarColor(stack: ItemStack): Int = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
 
@@ -225,11 +235,11 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
 
         val color = getBloodUIColor().substring(1).toInt(16) // Convert hex to int
         val percentage = if(stack.get(ModItemComponents.BLOOD_CHARGE) != null) (stack.get(ModItemComponents.BLOOD_CHARGE)!! * 100f).toInt() else 0
-        if(Screen.hasShiftDown()) tooltip.add(Text.literal("Blood charge percentage: ").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.literal("$percentage%").setStyle(EMPTY), color)))
+        if(Screen.hasShiftDown() && hasBloodChargeEnchant(stack)) tooltip.add(Text.literal("Blood charge percentage: ").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.literal("$percentage%").setStyle(EMPTY), color)))
 
         super.appendTooltip(stack, context, tooltip, type)
 
-        if(!Screen.hasShiftDown()) tooltip.add(Text.translatable("tooltip.${CleanCut.MOD_ID}.${getID()}.shift"))
+        if(!Screen.hasShiftDown() && hasBloodChargeEnchant(stack)) tooltip.add(Text.translatable("tooltip.${CleanCut.MOD_ID}.${getID()}.shift"))
     }
 
     open fun getID() = "carrion_cleaver"
