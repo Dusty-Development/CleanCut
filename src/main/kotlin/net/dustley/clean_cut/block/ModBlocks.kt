@@ -28,7 +28,7 @@ object ModBlocks {
     val CARRION_BONE: Block = registerBlock("carrion_bone", PillarBlock(AbstractBlock.Settings.create()
         .mapColor(MapColor.DULL_RED).instrument(NoteBlockInstrument.PIGLIN).requiresTool().strength(2.0f).sounds(BlockSoundGroup.BONE)))
 
-    val COMPACTED_LIVING_STEEL: Block = registerBlock("compacted_living_steel", Block(AbstractBlock.Settings.create()
+    val FRAMED_LIVING_STEEL: Block = registerBlock("compacted_living_steel", Block(AbstractBlock.Settings.create()
             .mapColor(MapColor.DULL_RED).instrument(NoteBlockInstrument.BASEDRUM).requiresTool().strength(5.0f, 6.0f).sounds(BlockSoundGroup.COPPER)))
 
     val DENTED_LIVING_STEEL: Block = registerBlock("dented_living_steel", Block(AbstractBlock.Settings.create()
@@ -63,7 +63,7 @@ object ModBlocks {
             .register(ItemGroupEvents.ModifyEntries { entries: FabricItemGroupEntries ->
                 entries.add(FLESH)
                 entries.add(CARRION_BONE)
-                entries.add(COMPACTED_LIVING_STEEL)
+                entries.add(FRAMED_LIVING_STEEL)
                 entries.add(DENTED_LIVING_STEEL)
                 entries.add(SEETHING_LANTERN)
             })
@@ -72,7 +72,7 @@ object ModBlocks {
             .register(ItemGroupEvents.ModifyEntries { entries: FabricItemGroupEntries ->
                 entries.add(FLESH)
                 entries.add(CARRION_BONE)
-                entries.add(COMPACTED_LIVING_STEEL)
+                entries.add(FRAMED_LIVING_STEEL)
                 entries.add(DENTED_LIVING_STEEL)
                 entries.add(SEETHING_LANTERN)
             })
