@@ -1,20 +1,28 @@
 {
   "itemGroup.clean_cut": "Clean Cut",
 
-  "item.clean_cut.carrion_cleaver": "Cleaver of the Carrion",
+  "item.clean_cut.carrion_cleaver": "Carrion Cleaver",
   "tooltip.clean_cut.carrion_cleaver": "Peace is a luxury, death is the normality.",
   "tooltip.clean_cut.carrion_cleaver.shift": "§7[Shift]",
 
-  "item.clean_cut.rose_blood_cleaver": "Cleaver of Rose Blood",
+  "item.clean_cut.rose_blood_cleaver": "Rose Blood Cleaver",
   "tooltip.clean_cut.rose_blood_cleaver": "Do not go gentle into that good night, Old age should burn and rave at close of day;",
   "tooltip.clean_cut.rose_blood_cleaver.shift": "§7[Shift]",
+
+  "item.clean_cut.caution_cleaver": "Caution Cleaver",
+  "tooltip.clean_cut.caution_cleaver": "Poison tears of distorted reflections",
+  "tooltip.clean_cut.caution_cleaver.shift": "§7[Shift]",
+
+  "item.clean_cut.inky_cleaver": "Inky Cleaver",
+  "tooltip.clean_cut.inky_cleaver": "MMMM! Goop!",
+  "tooltip.clean_cut.inky_cleaver.shift": "§7[Shift]",
 
   "item.clean_cut.living_steel": "Living Steel",
   "tooltip.clean_cut.living_steel.tooltip": "Its made of flesh, there like a 50% chance you could eat it.",
 
   "block.clean_cut.flesh": "Flesh Block",
   "block.clean_cut.carrion_bone": "Carrion Bone Block",
-  "block.clean_cut.compacted_living_steel": "Compacted Living Steel",
+  "block.clean_cut.framed_living_steel": "Framed Flesh Block",
   "block.clean_cut.dented_living_steel": "Dented Living Steel Block",
   "block.clean_cut.seething_lantern": "Seething Lantern",
 
@@ -25,6 +33,6 @@
 
   "enchantment.clean_cut.huntress.desc": "Your victim can be seen through walls, and their footsteps are seen clearly. When your victim dies, no one will know they died at you hands.",
   "enchantment.clean_cut.nursing.desc": "Now when throwing the cleaver at your victim, it will give you a heart, and you and your victims effects will swap, good or bad. But will now give your cleaver a cooldown for each throw.",
-  "enchantment.clean_cut.charlatan.desc": "(WIP) You can now throw your cleaver in two ways. When normally throwing, the cleaver will now auto aim, and hit three victims that are close by, before coming back to you. When sneaking and throwing, it will circle around you for 1 minute, then it will return to you.",
-  "enchantment.clean_cut.bloodrush.desc": "(WIP) Filling your blood charge will now Automatically put you into a frenzy, allowing you to use your cleaver like a riptide trident. But this will only last as long as you keep the blood charge up. And now when attacking your victim, it will stop there momentum."
+  "enchantment.clean_cut.charlatan.desc": "You can now throw your cleaver in two ways. When normally throwing, the cleaver will now auto aim, and hit three victims that are close by, before coming back to you. When sneaking and throwing, it will circle around you for 1 minute, then it will return to you.",
+  "enchantment.clean_cut.bloodrush.desc": "Filling your blood charge will now Automatically put you into a frenzy, allowing you to use your cleaver like a riptide trident. But this will only last as long as you keep the blood charge up. And now when attacking your victim, it will stop there momentum."
 }

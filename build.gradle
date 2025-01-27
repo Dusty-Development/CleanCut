@@ -1,7 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.8-SNAPSHOT'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
-	id "org.jetbrains.kotlin.jvm" version "2.0.21"
 }
 
 version = project.mod_version
@@ -12,18 +11,32 @@ base {
 }
 
 repositories {
+	// Add repositories to retrieve artifacts from in here.
+	// You should only use this when depending on other mods because
+	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
+	// for more information about repositories.
 	maven {
-		url = "https://api.modrinth.com/maven"
+		name = 'BlameJared Maven (CrT / Bookshelf)'
+		url = 'https://maven.blamejared.com'
 	}
 
 	maven {
-		name = 'Ladysnake Mods'
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/"
+	}
+	maven {
+		name = "Ladysnake Libs"
 		url = 'https://maven.ladysnake.org/releases'
 	}
+
+	maven { url = "https://mvn.devos.one/snapshots/" }
 }
 
 fabricApi {
-	configureDataGeneration()
+	configureDataGeneration {
+		client = true
+	}
 }
 
 dependencies {
@@ -34,21 +47,11 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-//	modImplementation "maven.modrinth:aaa-particles:${project.aaa_particle_version}"
-//	modImplementation "maven.modrinth:architectury-api:${project.architecture_version}+fabric"
 
-	// Cardinal Components
-//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.project.cca_version}"
-//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.project.cca_version}"
-//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-world:${project.project.cca_version}"
-//	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-block:${project.project.cca_version}"
-//
-//	include "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
-//	include "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
-//	include "org.ladysnake.cardinal-components-api:cardinal-components-world:${project.cca_version}"
-//	include "org.ladysnake.cardinal-components-api:cardinal-components-block:${project.cca_version}"
+	modImplementation("dev.emi:trinkets:${project.trinkets_version}")
+	modImplementation("foundry.veil:veil-fabric-${project.minecraft_version}:${project.veil_version}") { exclude group: "maven.modrinth" }
+//	modImplementation(include("com.tterrag.registrate_fabric:Registrate:${project.registrate_version}"))
 }
 
 processResources {
@@ -61,12 +64,6 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-	kotlinOptions {
-		jvmTarget = 21
-	}
 }
 
 java {

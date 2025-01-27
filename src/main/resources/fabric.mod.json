@@ -2,10 +2,10 @@
 	"schemaVersion": 1,
 	"id": "clean_cut",
 	"version": "${version}",
-	"name": "CleanCut",
+	"name": "Clean Cut",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"Dustley"
+		"Me!"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -16,33 +16,23 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			{
-				"value": "net.dustley.clean_cut.CleanCut",
-				"adapter": "kotlin"
-			}
+			"net.dustley.clean_cut.CleanCut"
 		],
 		"client": [
-			{
-				"adapter": "kotlin",
-				"value": "net.dustley.clean_cut.CleanCutClient"
-			}
+			"net.dustley.clean_cut.CleanCutClient"
 		],
 		"fabric-datagen": [
-			{
-				"value": "net.dustley.clean_cut.CleanCutDataGenerator",
-				"adapter": "kotlin"
-			}
+			"net.dustley.clean_cut.CleanCutDataGenerator"
 		]
 	},
 	"mixins": [
 		"clean_cut.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.7",
+		"fabricloader": ">=0.16.9",
 		"minecraft": "~1.21.1",
 		"java": ">=21",
-		"fabric-api": "*",
-		"fabric-language-kotlin": "*"
+		"fabric-api": "*"
 	},
 	"suggests": {
 		"another-mod": "*"

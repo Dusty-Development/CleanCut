@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+  "textures": { "layer0": "clean_cut:item/cleaver/carrion/carrion_cleaver_item" },
+  "overrides": [
+    { "predicate": { "clean_cut:cleaver_variant": 0},   "model":  "clean_cut:item/cleavers/carrion_cleaver_inventory"     },
+    { "predicate": { "clean_cut:cleaver_variant": 0.1}, "model":  "clean_cut:item/cleavers/rose_blood_cleaver_inventory"  },
+    { "predicate": { "clean_cut:cleaver_variant": 0.2}, "model":  "clean_cut:item/cleavers/caution_cleaver_inventory"     },
+    { "predicate": { "clean_cut:cleaver_variant": 0.3}, "model":  "clean_cut:item/cleavers/inky_cleaver_inventory"        }
+  ]
+}

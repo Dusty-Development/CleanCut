@@ -27,23 +27,21 @@ public class ClientSetup {
     }
     
     private static void registerSimpleSpecialModel(String id) {
-        LARGE_MODEL.put(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.identifier(id)), Map.of(
-                ModelTransformationMode.HEAD, ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.identifier(id + "_inventory")),
-                ModelTransformationMode.GUI, ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.identifier(id + "_inventory")),
-                ModelTransformationMode.GROUND, ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.identifier(id + "_inventory"))
+        LARGE_MODEL.put(ModelIdentifier.ofInventoryVariant(CleanCut.identifier(id)), Map.of(
+                ModelTransformationMode.HEAD, ModelIdentifier.ofInventoryVariant(CleanCut.identifier(id + "_inventory")),
+                ModelTransformationMode.GUI, ModelIdentifier.ofInventoryVariant(CleanCut.identifier(id + "_inventory")),
+                ModelTransformationMode.GROUND, ModelIdentifier.ofInventoryVariant(CleanCut.identifier(id + "_inventory"))
         ));
     }
     
     public static void registerExtraBakedModels(Consumer<ModelIdentifier> registration) {
         System.out.println("registered models");
-        registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.identifier("carrion_cleaver_inventory")));
-        registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.identifier("rose_blood_cleaver_inventory")));
+        registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.identifier("cleaver_inventory")));
         //registration.accept(ModelIdentifier.ofInventoryVariant(CleanCut.INSTANCE.id("carrion_cleaver_overlay")));
     }
 
     public static void clientSetup() {
-        registerSimpleSpecialModel("carrion_cleaver");
-        registerSimpleSpecialModel("rose_blood_cleaver");
+        registerSimpleSpecialModel("cleaver");
         System.out.println("client was called");
     }
 

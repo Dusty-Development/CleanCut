@@ -1,0 +1,7 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "clean_cut:item/cleaver_model",
+	"textures": {
+		"layer0": "clean_cut:item/cleaver/carrion/carrion_cleaver"
+	}
+}

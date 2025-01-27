@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "clean_cut:carrion_cleaver",
-    "clean_cut:rose_blood_cleaver"
+    "clean_cut:cleaver"
   ]
 }
