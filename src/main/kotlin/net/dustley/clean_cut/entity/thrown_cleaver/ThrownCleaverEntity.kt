@@ -195,7 +195,6 @@ class ThrownCleaverEntity(world: World, val isRose:Boolean, entityType: EntityTy
     override fun asItemStack(): ItemStack {
         return itemStack.copyComponentsToNewStack(itemStack.item, 1)
     }
-    fun asPublicItemStack():ItemStack = asItemStack()
 
     override fun onPlayerCollision(player: PlayerEntity?) {
         if (this.isOwner(player) || this.owner == null) {

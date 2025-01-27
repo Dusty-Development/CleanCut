@@ -6,11 +6,9 @@ import net.dustley.clean_cut.enchantment.ModEnchantments
 import net.dustley.clean_cut.entity.ModEntities
 import net.dustley.clean_cut.entity.thrown_cleaver.ThrownCleaverEntity
 import net.dustley.clean_cut.item.ModItems
-import net.dustley.clean_cut.particle.ModParticles
 import net.dustley.clean_cut.util.MialeeText
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.world.ClientWorld
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.AttributeModifierSlot
 import net.minecraft.component.type.AttributeModifiersComponent
@@ -35,8 +33,6 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSettings())
@@ -111,7 +107,7 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
                 entity.velocity = velocityDirection.lerp(velocityTarget, 0.2).multiply(2.0)
                 drainageAmount *= 2
 
-                spawnDashParticles(entity, entity.velocity.normalize())
+//                spawnDashParticles(entity, entity.velocity.normalize())
             }
         }
 
@@ -123,38 +119,38 @@ open class CarrionCleaverItem : AxeItem(ToolMaterials.NETHERITE, createItemSetti
             }
         }
     }
-
-    fun spawnDashParticles(entity: LivingEntity, dashDirection: Vec3d) {
-        val world = entity.world
-        if (world is ClientWorld) {
-            val radius = 1.0 // Circle radius
-            val particleCount = world.random.nextBetween(0,50) //20 // Number of particles in the circle
-            val direction = dashDirection.normalize()
-
-            // Calculate a perpendicular vector to the dash direction
-            val up = Vec3d(0.0, 1.0, 0.0) // Assume "up" for simplicity
-            val perpVector = direction.crossProduct(up).normalize()
-
-            for (i in 0 until particleCount) {
-                // Angle for each particle
-                val angle = (i / particleCount.toDouble()) * 2 * Math.PI
-                val xOffset = MathHelper.cos(angle.toFloat()) * radius
-                val zOffset = MathHelper.sin(angle.toFloat()) * radius
-
-                // Rotate the circle to align with the dash direction
-                val rotatedOffset = perpVector.multiply(xOffset).add(direction.crossProduct(perpVector).multiply(zOffset))
-
-                val particlePos = entity.pos.add(rotatedOffset)
-
-                // Spawn the particle
-                world.addParticle(
-                    ModParticles.BLOOD_DASH_PARTICLE,
-                    particlePos.x, particlePos.y, particlePos.z,
-                    entity.velocity.x, entity.velocity.y,entity.velocity.z // Speed
-                )
-            }
-        }
-    }
+//
+//    fun spawnDashParticles(entity: LivingEntity, dashDirection: Vec3d) {
+//        val world = entity.world
+//        if (world is ClientWorld) {
+//            val radius = 1.0 // Circle radius
+//            val particleCount = world.random.nextBetween(0,50) //20 // Number of particles in the circle
+//            val direction = dashDirection.normalize()
+//
+//            // Calculate a perpendicular vector to the dash direction
+//            val up = Vec3d(0.0, 1.0, 0.0) // Assume "up" for simplicity
+//            val perpVector = direction.crossProduct(up).normalize()
+//
+//            for (i in 0 until particleCount) {
+//                // Angle for each particle
+//                val angle = (i / particleCount.toDouble()) * 2 * Math.PI
+//                val xOffset = MathHelper.cos(angle.toFloat()) * radius
+//                val zOffset = MathHelper.sin(angle.toFloat()) * radius
+//
+//                // Rotate the circle to align with the dash direction
+//                val rotatedOffset = perpVector.multiply(xOffset).add(direction.crossProduct(perpVector).multiply(zOffset))
+//
+//                val particlePos = entity.pos.add(rotatedOffset)
+//
+//                // Spawn the particle
+//                world.addParticle(
+//                    ModParticles.BLOOD_DASH_PARTICLE,
+//                    particlePos.x, particlePos.y, particlePos.z,
+//                    entity.velocity.x, entity.velocity.y,entity.velocity.z // Speed
+//                )
+//            }
+//        }
+//    }
 
     private fun onThrow(stack: ItemStack, world: World, user: LivingEntity, power:Float) {
         val entity = ThrownCleaverEntity(user, world, 2.5, (BASE_ATTACK_DAMMAGE + ToolMaterials.NETHERITE.attackDamage).toDouble(), stack.copyComponentsToNewStack(stack.item, 1), isRose(), if(isRose()) ModEntities.THROWN_ROSE_CLEAVER else ModEntities.THROWN_REGULAR_CLEAVER)

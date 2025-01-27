@@ -1,7 +1,6 @@
 package net.dustley.clean_cut.particle
 
 import net.dustley.clean_cut.CleanCut
-import net.dustley.clean_cut.particle.blood.BloodDashParticle
 import net.dustley.clean_cut.particle.blood.BloodDripParticle
 import net.dustley.clean_cut.particle.blood.BloodSplatParticle
 import net.dustley.clean_cut.particle.huntress.HuntressFloorParticle
@@ -28,13 +27,13 @@ object ModParticles {
         Registry.register(Registries.PARTICLE_TYPE, CleanCut.identifier("blood_drip_particle"), BLOOD_DRIP_PARTICLE)
         Registry.register(Registries.PARTICLE_TYPE, CleanCut.identifier("blood_splat_particle"), BLOOD_SPLAT_PARTICLE)
 
-        Registry.register(Registries.PARTICLE_TYPE, CleanCut.identifier("blood_dash_particle"), BLOOD_DASH_PARTICLE)
+//        Registry.register(Registries.PARTICLE_TYPE, CleanCut.identifier("blood_dash_particle"), BLOOD_DASH_PARTICLE)
     }
 
     fun registerClientParticles() {
         ParticleFactoryRegistry.getInstance().register(HUNTRESS_FLOOR_PARTICLE) { sprites -> HuntressFloorParticle.Companion.Factory(sprites) }
         ParticleFactoryRegistry.getInstance().register(BLOOD_DRIP_PARTICLE) { sprites -> BloodDripParticle.Companion.Factory(sprites) }
         ParticleFactoryRegistry.getInstance().register(BLOOD_SPLAT_PARTICLE) { sprites -> BloodSplatParticle.Companion.Factory(sprites) }
-        ParticleFactoryRegistry.getInstance().register(BLOOD_DASH_PARTICLE) { sprites -> BloodDashParticle.Companion.Factory(sprites) }
+//        ParticleFactoryRegistry.getInstance().register(BLOOD_DASH_PARTICLE) { sprites -> BloodDashParticle.Companion.Factory(sprites) }
     }
 }
