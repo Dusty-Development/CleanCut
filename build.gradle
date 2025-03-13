@@ -31,6 +31,18 @@ repositories {
 	}
 
 	maven { url = "https://mvn.devos.one/snapshots/" }
+
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 fabricApi {
@@ -52,6 +64,7 @@ dependencies {
 	modImplementation("dev.emi:trinkets:${project.trinkets_version}")
 	modImplementation("foundry.veil:veil-fabric-${project.minecraft_version}:${project.veil_version}") { exclude group: "maven.modrinth" }
 //	modImplementation(include("com.tterrag.registrate_fabric:Registrate:${project.registrate_version}"))
+	modRuntimeOnly(modCompileOnly("maven.modrinth:marksman:${project.marksman_version}"))
 }
 
 processResources {
