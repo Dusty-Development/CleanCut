@@ -1,9 +1,13 @@
 {
   "replace": false,
   "values": [
-    "clean_cut:carrion_bone",
+    "clean_cut:carrion_bone_block",
     "clean_cut:dented_living_steel",
     "clean_cut:compacted_living_steel",
-    "clean_cut:seething_lantern"
+    "clean_cut:seething_lantern",
+    "clean_cut:framed_living_steel",
+    "clean_cut:tendon_chain",
+    "clean_cut:carrion_bone_bundle"
+
   ]
 }

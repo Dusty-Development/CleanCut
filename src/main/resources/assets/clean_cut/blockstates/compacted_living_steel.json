@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "clean_cut:block/compacted_living_steel" }
+    "": {
+      "model": "clean_cut:block/compacted_living_steel"
+    }
   }
 }

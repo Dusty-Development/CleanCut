@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "clean_cut:block/carrion_bone_bundle_top",
+    "side": "clean_cut:block/carrion_bone_bundle_side"
+  }
+}

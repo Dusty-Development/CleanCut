@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "clean_cut:block/dented_living_steel" }
+    "": {
+      "model": "clean_cut:block/dented_living_steel"
+    }
   }
 }

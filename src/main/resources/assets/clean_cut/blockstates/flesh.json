@@ -1,5 +1,120 @@
 {
   "variants": {
-    "": { "model": "clean_cut:block/flesh" }
+    "axis=x,blinking=false": [
+      {
+        "model": "clean_cut:block/flesh",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "clean_cut:block/flesh",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y,blinking=false": [
+      {
+        "model": "clean_cut:block/flesh"
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored"
+      },
+      {
+        "model": "clean_cut:block/flesh",
+        "y": 180
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored",
+        "y": 180
+      }
+    ],
+    "axis=z,blinking=false": [
+      {
+        "model": "clean_cut:block/flesh",
+        "x": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored",
+        "x": 90
+      },
+      {
+        "model": "clean_cut:block/flesh",
+        "x": 90,
+        "y": 180
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored",
+        "x": 90,
+        "y": 180
+      }
+    ],
+    "axis=x,blinking=true": [
+      {
+        "model": "clean_cut:block/flesh_blinking",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored_blinking",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_blinking",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored_blinking",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y,blinking=true": [
+      {
+        "model": "clean_cut:block/flesh_blinking"
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored_blinking"
+      },
+      {
+        "model": "clean_cut:block/flesh_blinking",
+        "y": 180
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored_blinking",
+        "y": 180
+      }
+    ],
+    "axis=z,blinking=true": [
+      {
+        "model": "clean_cut:block/flesh_blinking",
+        "x": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored_blinking",
+        "x": 90
+      },
+      {
+        "model": "clean_cut:block/flesh_blinking",
+        "x": 90,
+        "y": 180
+      },
+      {
+        "model": "clean_cut:block/flesh_mirrored_blinking",
+        "x": 90,
+        "y": 180
+      }
+    ]
   }
 }

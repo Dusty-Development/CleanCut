@@ -1,3 +1,5 @@
 {
-  "parent": "clean_cut:block/carrion_bone"
+  "parent": "item/generated",
+  "textures": { "layer0": "clean_cut:item/carrion_bone" }
+
 }

@@ -3,15 +3,17 @@
 	"id": "clean_cut",
 	"version": "${version}",
 	"name": "Clean Cut",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Clean Cut",
 	"authors": [
-		"Me!"
+		"Dustley",
+		"InfinityFarzad",
+		"KrimsonKolbolt"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "Apache License",
 	"icon": "assets/clean_cut/icon.png",
 	"environment": "*",
 	"entrypoints": {

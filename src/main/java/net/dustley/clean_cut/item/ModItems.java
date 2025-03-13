@@ -22,6 +22,9 @@ public class ModItems {
     // Items //
     public static final Item CLEAVER = registerItem("cleaver", new CleaverItem());
     public static final Item LIVING_STEEL = registerItem("living_steel", new LivingSteelItem());
+    public static final Item CARRION_BONE = registerItem("carrion_bone", new Item(new Item.Settings()));
+
+
 
     // Item group //
     public static final RegistryKey<ItemGroup> CLEAN_CUT_ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), CleanCut.identifier("item_group"));
@@ -45,6 +48,8 @@ public class ModItems {
                 .register(entries -> {
                     addCleaversToEntries(entries);
                     entries.add(LIVING_STEEL);
+                    entries.add(ModItems.CARRION_BONE);
+
                 });
 
         // Cleavers

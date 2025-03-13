@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "clean_cut:block/tendon_chain",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "clean_cut:block/tendon_chain"
+    },
+    "axis=z": {
+      "model": "clean_cut:block/tendon_chain",
+      "x": 90
+    }
+  }
+}

@@ -1,9 +1,11 @@
 package net.dustley.clean_cut;
 
+import net.dustley.clean_cut.block.ModBlocks;
 import net.dustley.clean_cut.component.ModItemComponents;
 import net.dustley.clean_cut.enchantment.ModEnchantments;
 import net.dustley.clean_cut.entity.ModEntities;
 import net.dustley.clean_cut.item.ModItems;
+import net.dustley.clean_cut.particle.ModParticles;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -29,8 +31,8 @@ public class CleanCut implements ModInitializer {
 		ModEntities.registerModEntities();
 		ModItems.registerModItems();
 		ModItemComponents.registerDataComponentTypes();
-//		ModComponents.registerModComponents();
-//		ModBlocks.registerModBlocks();
+		ModParticles.registerParticles();
+		ModBlocks.registerModBlocks();
 
 		LOGGER.info("Hello Fabric world!");
 	}

@@ -64,7 +64,7 @@ public class CleaverProjectileEntity extends PersistentProjectileEntity {
     public void onHitEntity() {
         hitTimer = 10;
         hasHitEntity = true;
-        holdingStarted = true;
+
     }
 
     public Box getHitBox() { return Box.of(Vec3d.ZERO, enchantmentModule.getHitBoxWidth(), enchantmentModule.getHitBoxHeight(), enchantmentModule.getHitBoxWidth()); }
