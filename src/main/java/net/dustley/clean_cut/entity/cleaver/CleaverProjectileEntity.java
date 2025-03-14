@@ -8,6 +8,8 @@ import net.dustley.clean_cut.item.weapon.cleaver.CleaverItem;
 import net.dustley.clean_cut.item.weapon.cleaver.CleaverVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -56,6 +58,19 @@ public class CleaverProjectileEntity extends PersistentProjectileEntity {
     public float getRotationAnimation(Float partialTicks) {
         CurrentSpinAngle = (SpinningReversed ? 1 : -1) * (this.age + partialTicks) * -30f;
         return CurrentSpinAngle * 2;
+    }
+
+    //==// SFX \\==\\
+    public CleaverProjectileSoundInstance soundInstance;
+    public void updateAudio() {
+        ClientPlayerEntity localPlayer = MinecraftClient.getInstance().player;
+
+        if(localPlayer != null) {
+            if (soundInstance == null) {
+                soundInstance = new CleaverProjectileSoundInstance(this, localPlayer);
+                MinecraftClient.getInstance().getSoundManager().play(soundInstance);
+            }
+        }
     }
 
     //==// DAMAGE \\==\\
@@ -151,6 +166,7 @@ public class CleaverProjectileEntity extends PersistentProjectileEntity {
         tryDamageEntitiesInHitBox();
 
         updateModule();
+        updateAudio();
         super.tick();
     }
 

@@ -27,7 +27,7 @@ public class CleaverProjectileEntityRenderer extends EntityRenderer<CleaverProje
     @Override
     public void render(CleaverProjectileEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         // HIT-BOX
-        if(MinecraftClient.getInstance().gameRenderer.getClient().getDebugHud().shouldShowDebugHud()) {
+        if(MinecraftClient.getInstance().getEntityRenderDispatcher().shouldRenderHitboxes()) {
             matrices.push();
             matrices.translate(0f, entity.getHeight()*0.5f, 0f);
 
