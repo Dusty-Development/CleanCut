@@ -2,6 +2,6 @@
 	"credit": "Made with Blockbench",
 	"parent": "clean_cut:item/cleaver_model",
 	"textures": {
-		"layer0": "clean_cut:item/cleaver/caution/caution_cleaver"
+		"layer0": "clean_cut:item/cleaver/coral/coral_cleaver"
 	}
 }

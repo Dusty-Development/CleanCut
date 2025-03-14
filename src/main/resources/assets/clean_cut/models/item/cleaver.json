@@ -4,7 +4,7 @@
   "overrides": [
     { "predicate": { "clean_cut:cleaver_variant": 0},   "model":  "clean_cut:item/cleavers/carrion_cleaver"     },
     { "predicate": { "clean_cut:cleaver_variant": 0.1}, "model":  "clean_cut:item/cleavers/rose_blood_cleaver"  },
-    { "predicate": { "clean_cut:cleaver_variant": 0.2}, "model":  "clean_cut:item/cleavers/caution_cleaver"     },
+    { "predicate": { "clean_cut:cleaver_variant": 0.2}, "model":  "clean_cut:item/cleavers/coral_cleaver"     },
     { "predicate": { "clean_cut:cleaver_variant": 0.3}, "model":  "clean_cut:item/cleavers/inky_cleaver"        }
   ]
 }
